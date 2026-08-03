@@ -1,0 +1,533 @@
+/* ==========================================================================
+   ISARO AUTOMATION - MASTER RESPONSIVE STYLESHEET
+   ========================================================================== */
+
+:root {
+    --isaro-red: #c82333;
+    --isaro-dark-red: #a71d2a;
+    --isaro-dark: #1e2125;
+    --isaro-gray: #6c757d;
+    --isaro-footer-bg: #222529;
+    --isaro-footer-text: #a0a5ab;
+}
+/* --------------------------------------------------
+   1. GLOBAL FIXES & BODY PADDING
+   -------------------------------------------------- */
+html, body {
+    max-width: 100% !important;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    /* Fixed Header එක නිසා Content එක යටට යෑම වැළැක්වීමට */
+    padding-top: 95px !important; 
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.x-small { font-size: 0.75rem; }
+.fs-7 { font-size: 0.88rem; }
+.fw-extrabold { font-weight: 800; }
+
+/* --------------------------------------------------
+   2. HEADER STYLES (Enlarged & 100% Fixed)
+   -------------------------------------------------- */
+.isaro-navbar {
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 18px 0;
+    
+    /* 100% Fixed Position Properties */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 1030 !important;
+    
+    transition: all 0.3s ease;
+}
+
+.isaro-navbar .navbar-brand img {
+    max-height: 58px;
+    width: auto;
+    object-fit: contain;
+}
+
+.isaro-nav-link {
+    color: var(--isaro-dark) !important;
+    font-weight: 600;
+    font-size: 0.98rem;
+    padding: 10px 18px !important;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.isaro-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    width: 0%;
+    height: 3px;
+    background-color: var(--isaro-red);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.isaro-nav-link:hover,
+.isaro-nav-link.active {
+    color: var(--isaro-red) !important;
+}
+
+.isaro-nav-link:hover::after,
+.isaro-nav-link.active::after {
+    width: 70%;
+}
+
+.isaro-search-box {
+    position: relative;
+    min-width: 230px;
+}
+
+.isaro-search-input {
+    border-radius: 50px !important;
+    padding-left: 18px !important;
+    padding-right: 40px !important;
+    border: 1px solid #e0e0e0 !important;
+    font-size: 0.9rem;
+    height: 42px;
+}
+
+.isaro-search-input:focus {
+    border-color: var(--isaro-red) !important;
+    box-shadow: 0 0 0 0.2rem rgba(200, 35, 51, 0.15) !important;
+}
+
+.isaro-search-btn {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: var(--isaro-gray);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --------------------------------------------------
+   3. HERO BANNER
+   -------------------------------------------------- */
+.isaro-hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.72)), url('../images/7530266532463de32d07c4ca427023eb7147db57.png') center/cover no-repeat;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-title {
+    font-size: 2.8rem;
+    line-height: 1.25;
+}
+
+.partner-badge {
+    width: 46px;
+    height: 46px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.partner-badge img {
+    max-height: 26px;
+    max-width: 30px;
+    object-fit: contain;
+}
+
+/* --------------------------------------------------
+   4. ABOUT & OFFER SECTIONS
+   -------------------------------------------------- */
+.about-img-container {
+    position: relative;
+}
+
+.about-main-img {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.about-sub-img {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 45%;
+    border-radius: 12px;
+    border: 4px solid #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.about-badge-card {
+    background: #ffffff;
+    padding: 15px 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+}
+
+.offer-section {
+    background: #111;
+    position: relative;
+    overflow: hidden;
+}
+ 
+.offer-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    min-height: 450px;
+}
+ 
+.offer-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+ 
+.offer-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.65) 100%);
+}
+ 
+.offer-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+ 
+.offer-card {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 40px 35px;
+    max-width: 650px;
+    width: 100%;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
+}
+ 
+.offer-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--isaro-dark);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+}
+ 
+.offer-prev {
+    left: -16px;
+}
+ 
+.offer-next {
+    right: -16px;
+}
+ 
+.offer-control:hover {
+    background: #ffffff;
+}
+ 
+.offer-slide {
+    display: none;
+}
+ 
+.offer-slide.active {
+    display: block;
+}
+ 
+.offer-indicators {
+    gap: 8px;
+}
+ 
+.offer-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+ 
+.offer-dot:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.95);
+}
+ 
+.offer-dot.active {
+    background: var(--isaro-red);
+    border-color: var(--isaro-red);
+}
+ 
+.testimonial-inner {
+    position: relative;
+}
+ 
+.testimonial-control {
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    transform: translateY(-50%);
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+}
+ 
+.testimonial-control:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+ 
+.testimonial-slide {
+    display: none;
+}
+ 
+.testimonial-slide.active {
+    display: block;
+}
+
+/* --------------------------------------------------
+   5. PRODUCTS & PROJECTS
+   -------------------------------------------------- */
+.isaro-product-card {
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.isaro-product-card:hover {
+    border-color: var(--isaro-red);
+    box-shadow: 0 8px 20px rgba(200, 35, 51, 0.12) !important;
+    transform: translateY(-4px);
+}
+
+.product-wishlist-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    transition: all 0.25s ease;
+}
+ 
+.product-wishlist-btn:hover {
+    background: var(--isaro-red);
+    color: #ffffff;
+    border-color: var(--isaro-red);
+}
+ 
+.product-overlay {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+ 
+.isaro-product-card:hover .product-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+ 
+.product-overlay-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #eaeaea;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: var(--isaro-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+ 
+.product-overlay-btn:hover {
+    background: var(--isaro-red);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+ 
+.product-badge {
+    font-size: 0.65rem;
+    letter-spacing: 0.02em;
+}
+ 
+.testimonials-section {
+    background: linear-gradient(rgba(20, 22, 26, 0.92), rgba(20, 22, 26, 0.92)), url('../images/7e3d191a15ac23b17a1f8a34d1a0cbed7c03be85.jpg') center/cover no-repeat;
+}
+
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+}
+
+.project-card {
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* --------------------------------------------------
+   6. FOOTER & WHATSAPP
+   -------------------------------------------------- */
+.isaro-footer {
+    background-color: var(--isaro-footer-bg);
+    color: var(--isaro-footer-text);
+    font-size: 0.88rem;
+}
+
+.isaro-footer-logo-bg {
+    background-color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.isaro-footer-logo-bg img {
+    max-height: 38px;
+}
+
+.isaro-subscribe-input {
+    background: transparent !important;
+    border: 1px solid #495057 !important;
+    color: #ffffff !important;
+    font-size: 0.83rem;
+}
+
+.isaro-quick-links {
+    list-style: none;
+    padding: 0;
+}
+
+.isaro-quick-links a {
+    color: var(--isaro-footer-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.isaro-quick-links a:hover {
+    color: #ffffff;
+}
+
+.whatsapp-float {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 26px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* --------------------------------------------------
+   7. RESPONSIVE BREAKPOINTS
+   -------------------------------------------------- */
+@media (max-width: 991.98px) {
+    .hero-title { font-size: 2.1rem; }
+    .about-sub-img { display: none; }
+    .offer-carousel { min-height: 420px; }
+    .offer-card { padding: 32px 24px; }
+}
+
+@media (max-width: 767.98px) {
+    .offer-control { width: 38px; height: 38px; }
+    .offer-card { padding: 28px 20px; }
+    .offer-carousel { min-height: 380px; }
+}
+
+@media (max-width: 575.98px) {
+    .hero-title { font-size: 1.6rem; }
+    .isaro-navbar .navbar-collapse {
+        background: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .offer-card { padding: 24px 18px; }
+    .offer-control { width: 34px; height: 34px; }
+}
+
+
+
+
+
