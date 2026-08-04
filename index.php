@@ -2,9 +2,17 @@
 
 <!-- Comprehensive Responsive & Premium Design CSS -->
 <style>
-/* Global Smooth Enhancements */
+/* Global Smooth Enhancements & Flicker Prevention */
 .isaro-main-wrapper {
     font-family: 'Poppins', sans-serif;
+}
+
+/* Hero Section Height Lock to Prevent FOUC / Layout Shift Flicker */
+.isaro-hero-section {
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* WhatsApp Icon Size & Hover Animation Enhancement */
@@ -133,6 +141,7 @@
     .offer-control-prev-custom { left: 15px !important; }
     .offer-control-next-custom { right: 15px !important; }
     .offer-banner-bg { min-height: 420px !important; }
+    .isaro-hero-section { min-height: 400px; }
 }
 
 @media (max-width: 575.98px) {
@@ -150,6 +159,7 @@
     .about-badge-circle { width: 55px !important; height: 55px !important; }
     .offer-banner-bg { min-height: 380px !important; }
     .whatsapp-float { width: 52px !important; height: 52px !important; font-size: 28px !important; }
+    .isaro-hero-section { min-height: 360px; }
 }
 </style>
 

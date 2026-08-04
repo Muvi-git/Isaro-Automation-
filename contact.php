@@ -401,7 +401,7 @@
                 <div class="col-12 col-lg-6">
                     <div class="contact-img-box">
                         <!-- IMAGE PLACEHOLDER: Technician Cable Testing Image -->
-                        <img src="assets/images/2eaf6daacbcfeb54ef8944e2eb85c527772da507.png" alt="Contact Technician Working">
+                        <img src="assets/images/2eaf6daacbcfeb54ef8944e2eb85c527772da507 (1).png" alt="Contact Technician Working">
                     </div>
                 </div>
             </div>

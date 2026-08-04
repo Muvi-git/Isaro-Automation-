@@ -20,11 +20,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Custom Master Style -->
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <!-- ALL PAGE STYLES & LAYOUT SHIFT FIXES LOADED DIRECTLY IN HEAD -->
+    <!-- ALL PAGE STYLES & TOP ACCENT PROGRESS BAR STYLES -->
     <style>
 /* 1. Global Layout Stabilization & Scrollbar Jump Fix */
 html {
-    overflow-y: scroll; /* Forces permanent scrollbar space so navbar never shifts left/right */
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 html, body {
@@ -40,6 +41,46 @@ body {
     overflow-x: hidden;
     background-color: #ffffff;
 }
+
+/* ===================================================
+   TOP SLIM ACCENT PROGRESS BAR
+=================================================== */
+#top-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #b03030, #ff0000);
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.75);
+    z-index: 999999;
+    opacity: 0;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#top-progress-bar.is-loading {
+    opacity: 1;
+}
+
+/* ===================================================
+   GPU-ACCELERATED ZERO-TEARING SCROLL REVEAL
+=================================================== */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    isolation: isolate;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.reveal-on-scroll.is-revealed {
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+}
+
 
 /* ===================================================
    ABOUT PAGE STYLES (.isaro-about-page)
@@ -571,6 +612,9 @@ body {
 </head>
 <body>
 
+<!-- TOP SLIM RED PROGRESS BAR -->
+<div id="top-progress-bar"></div>
+
 <header class="isaro-navbar navbar navbar-expand-lg sticky-top">
     <div class="container">
         <!-- Logo -->
@@ -613,3 +657,81 @@ body {
         </div>
     </div>
 </header>
+
+<!-- ZERO-TEARING SCROLL REVEAL SCRIPT (STRICTLY FROM SPECIAL OFFER DOWNWARDS) -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const progressBar = document.getElementById("top-progress-bar");
+
+    // 1. Initial Page Load Top Bar Accent
+    if (progressBar) {
+        requestAnimationFrame(function() {
+            progressBar.classList.add("is-loading");
+            progressBar.style.width = "70%";
+            setTimeout(function() {
+                progressBar.style.width = "100%";
+                setTimeout(function() {
+                    progressBar.classList.remove("is-loading");
+                    progressBar.style.width = "0%";
+                }, 220);
+            }, 160);
+        });
+    }
+
+    // 2. Trigger Progress Bar on Navigation
+    const links = document.querySelectorAll("a[href]");
+    links.forEach(function(link) {
+        const href = link.getAttribute("href");
+        if (href && !href.startsWith("#") && !href.startsWith("javascript") && !href.startsWith("tel:") && !href.startsWith("mailto:") && link.target !== "_blank") {
+            link.addEventListener("click", function(e) {
+                if (progressBar) {
+                    progressBar.style.width = "0%";
+                    progressBar.classList.add("is-loading");
+                    setTimeout(function() {
+                        progressBar.style.width = "80%";
+                    }, 20);
+                }
+            });
+        }
+    });
+
+    // 3. Scroll Reveal targets strictly starting from Special Offer (.offer-section) downwards
+    const revealTargets = document.querySelectorAll(
+        ".offer-section, .product-card, .product-card-box, .testimonials-section, .project-card-item, .project-grid-card, .vm-card, .team-card-item, .contact-info-card, .contact-img-box, .contact-map-box, .contact-form-wrapper"
+    );
+
+    function isInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.bottom >= 0
+        );
+    }
+
+    const observerOptions = {
+        root: null,
+        rootMargin: "0px 0px 80px 0px",
+        threshold: 0.05
+    };
+
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                requestAnimationFrame(function() {
+                    entry.target.classList.add("is-revealed");
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    revealTargets.forEach(function(el) {
+        if (!isInViewport(el)) {
+            el.classList.add("reveal-on-scroll");
+            revealObserver.observe(el);
+        } else {
+            el.classList.add("is-revealed");
+        }
+    });
+});
+</script>
