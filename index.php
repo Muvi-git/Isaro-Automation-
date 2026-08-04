@@ -433,7 +433,7 @@
 </section>
 
 <!-- 5. TESTIMONIALS -->
-<section class="testimonials-section py-5 text-white position-relative" style="background: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/7e3d191a15ac23b17a1f8a34d1a0cbed7c03be85.jpg') center/cover no-repeat;">
+<section class="testimonials-section py-5 text-white position-relative" style="background: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/b95b4009ce4b6e877bde5514673695345345fdcc.png') center/cover no-repeat;">
     <div class="container py-3">
         <div class="row align-items-center g-4">
             
