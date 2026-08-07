@@ -8,6 +8,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isaro Automation Systems (Pvt) Ltd</title>
 
+    <!-- Ultra-HD Crisp Vector Circular Favicon (Lossless Upscaled SVG) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='isaroGlow' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23900c3f'/%3E%3Cstop offset='50%25' stop-color='%23c71585'/%3E%3Cstop offset='100%25' stop-color='%23e65c9c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23isaroGlow)' stroke='%23ffffff' stroke-width='2'/%3E%3Ccircle cx='50' cy='22' r='7' fill='%23ffd700' stroke='%23333333' stroke-width='0.8'/%3E%3Ccircle cx='50' cy='22' r='3.2' fill='%23000000'/%3E%3Cpolyline points='12,47 40,47 50,28 62,75 72,54 88,47' fill='none' stroke='%23ffd700' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpolyline points='12,54 38,54 50,35 62,82 72,61 88,54' fill='none' stroke='%23ffd700' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
     <!-- Google Fonts Preconnect (Speed & Font Flicker Fix) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,31 +23,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Custom Master Style -->
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <!-- ALL PAGE STYLES & TOP ACCENT PROGRESS BAR STYLES -->
+    <!-- APPLE-STYLE ZERO-SHIFT PREMIUM ANIMATION ENGINE -->
     <style>
-/* 1. Global Layout Stabilization & Scrollbar Jump Fix */
-html {
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-}
-
+/* 1. ROCK-SOLID GLOBAL STABILITY (NO GAPS, NO TRANSFORMS ON BODY) */
 html, body {
+    margin: 0 !important;
+    padding: 0 !important;
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    overflow-x: hidden;
     background-color: #ffffff;
+    scroll-behavior: smooth;
+    /* Prevent sticky breakdown: */
+    overflow-x: clip !important; 
 }
 
-/* ===================================================
-   TOP SLIM ACCENT PROGRESS BAR
-=================================================== */
+/* 2. TOP SLIM ACCENT PROGRESS BAR */
 #top-progress-bar {
     position: fixed;
     top: 0;
@@ -63,24 +58,179 @@ body {
     opacity: 1;
 }
 
-/* ===================================================
-   GPU-ACCELERATED ZERO-TEARING SCROLL REVEAL
-=================================================== */
-.reveal-on-scroll {
+/* 3. 100% STABLE STICKY HEADER (NO ANIMATIONS HERE) */
+header.isaro-navbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1050 !important;
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    margin-top: 0 !important;
+    transform: translateZ(0); /* Hardware lock to prevent jitter */
+}
+
+.isaro-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.isaro-wishlist-nav-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #333333;
+    text-decoration: none;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    flex-shrink: 0;
+}
+
+.isaro-wishlist-nav-btn:hover,
+.isaro-wishlist-nav-btn.active {
+    background-color: #b03030;
+    color: #ffffff !important;
+    border-color: #b03030;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(176, 48, 48, 0.28);
+}
+
+.isaro-wishlist-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #b03030;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.25s ease;
+}
+
+.isaro-wishlist-nav-btn:hover .isaro-wishlist-badge,
+.isaro-wishlist-nav-btn.active .isaro-wishlist-badge {
+    background-color: #1e2125;
+    color: #ffffff;
+}
+
+/* 4. LIVE SEARCH DROPDOWN */
+.isaro-search-box {
+    position: relative;
+}
+
+#liveSearchResults {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    min-width: 280px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    margin-top: 6px;
+    z-index: 1080;
+    max-height: 320px;
+    overflow-y: auto;
+    display: none;
+    padding: 6px;
+}
+
+#liveSearchResults .dropdown-item {
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    white-space: normal;
+}
+
+#liveSearchResults .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 5. APPLE-STYLE CINEMATIC SCROLL REVEAL (NO BLUR, PERFECT SLIDE) */
+.apple-reveal {
     opacity: 0;
-    transform: translate3d(0, 24px, 0);
-    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(45px) scale(0.98);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
-    isolation: isolate;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
 }
 
-.reveal-on-scroll.is-revealed {
+.apple-reveal.is-revealed {
     opacity: 1 !important;
-    transform: translate3d(0, 0, 0) !important;
+    transform: translateY(0) scale(1) !important;
 }
 
+/* 6. APPLE-STYLE CINEMATIC HERO ENTRANCE (TEXT ONLY, BACKGROUND STAYS STABLE) */
+.hero-title, .about-hero-title, .contact-hero-title, .page-hero-title {
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+.lead, .about-hero-p, .contact-hero-p, .who-title, .form-section-title, .page-hero-desc {
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+.isaro-hero-section .btn, .partner-badge {
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+@keyframes appleHeroText {
+    0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 7. FLOATING WHATSAPP BUTTON */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
 
 /* ===================================================
    ABOUT PAGE STYLES (.isaro-about-page)
@@ -280,7 +430,6 @@ body {
     margin-bottom: 0;
     font-weight: 300;
 }
-
 
 /* ===================================================
    CONTACT PAGE STYLES (.isaro-contact-page)
@@ -552,44 +701,6 @@ body {
     box-shadow: 0 6px 16px rgba(176, 48, 48, 0.38);
 }
 
-
-/* ===================================================
-   FLOATING WHATSAPP & RESPONSIVE FIXES
-=================================================== */
-.whatsapp-float {
-    position: fixed;
-    width: 58px;
-    height: 58px;
-    bottom: 25px;
-    right: 25px;
-    background-color: #25d366;
-    color: #FFFFFF !important;
-    border-radius: 50px;
-    font-size: 32px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-}
-
-.whatsapp-float:hover {
-    transform: scale(1.15) translateY(-5px);
-    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
-    background-color: #20ba5a !important;
-}
-
-.whatsapp-float:hover i {
-    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
-}
-
-@keyframes whatsapp-shake {
-    0% { transform: rotate(-12deg); }
-    100% { transform: rotate(12deg); }
-}
-
 @media (max-width: 991.98px) {
     .about-hero-title, .contact-hero-title { font-size: 2.2rem; }
     .who-title, .team-section-title, .form-section-title { font-size: 1.8rem; }
@@ -647,19 +758,91 @@ body {
                 </li>
             </ul>
 
-            <!-- Search Form -->
-            <form class="d-flex isaro-search-box mt-2 mt-lg-0" action="products.php" method="GET">
-                <input class="form-control isaro-search-input w-100" type="search" name="query" placeholder="Search..." aria-label="Search" required>
-                <button class="isaro-search-btn" type="submit" title="Search">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
+            <!-- Header Right Actions: Search Box & Wishlist Icon -->
+            <div class="isaro-header-actions mt-2 mt-lg-0">
+                <!-- Live Search Form Box -->
+                <form class="d-flex isaro-search-box position-relative" action="products.php" method="GET" autocomplete="off">
+                    <input class="form-control isaro-search-input w-100" type="search" id="headerSearchInput" name="query" placeholder="Search..." aria-label="Search" onkeyup="handleHeaderLiveSearch(this.value)" required>
+                    <button class="isaro-search-btn" type="submit" title="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                    <!-- Live Search Dropdown Results Menu -->
+                    <div id="liveSearchResults" class="dropdown-menu shadow-lg border-0 rounded-3 p-2 mt-1 w-100" style="display: none; position: absolute; top: 100%; left: 0;">
+                        <!-- Dynamic items rendered here -->
+                    </div>
+                </form>
+
+                <!-- Wishlist / Saved Inquiry List Header Link -->
+                <a href="wishlist.php" class="isaro-wishlist-nav-btn <?php echo ($current_page == 'wishlist.php') ? 'active' : ''; ?>" title="My Saved Inquiry List">
+                    <i class="far fa-heart fs-6"></i>
+                    <span class="isaro-wishlist-badge" id="headerWishlistCount">0</span>
+                </a>
+            </div>
         </div>
     </div>
 </header>
 
-<!-- ZERO-TEARING SCROLL REVEAL SCRIPT (STRICTLY FROM SPECIAL OFFER DOWNWARDS) -->
+<!-- 100% UNIVERSAL SCROLL REVEAL (FOR EVERY SINGLE PAGE & GRID) -->
 <script>
+// Global Industrial Product Database for Header Live Search
+window.isaroGlobalSearchDB = [
+    { title: 'Industrial Digital Panel Meters', code: 'ISA-DPM-9021', price: 'Rs 5,000', link: 'product-detail.php', img: 'assets/images/b432d96cfa8f80614741d6f26ee4c84e73ec4f86.png' },
+    { title: 'Pressure Regulator', code: 'ISA-PRV-1022', price: 'Rs 5,000', link: 'product-detail.php', img: 'assets/images/811821004797026ac18c9a115f1b50578adfd1d1 (1).png' },
+    { title: 'Hand Valve Pneumatic', code: 'ISA-HVL-3011', price: 'Rs 5,000', link: 'product-detail.php', img: 'assets/images/59935624d6a0605b083cee98e98ab5367e12f66d (1).png' },
+    { title: 'Hydraulic Cylinders', code: 'ISA-HCY-4050', price: 'Rs 5,000', link: 'product-detail.php', img: 'assets/images/d5383f22ac03dc846865eaef9c1961bdefea7a5e (1).png' },
+    { title: 'Programmable Terminals', code: 'ISA-PTM-8010', price: 'Rs 5,000', link: 'product-detail.php', img: 'assets/images/2bd82bccc12a674da93024bcfa909e92c9856c96.png' },
+    { title: 'Switching Power Supplies', code: 'ISA-SPS-2405', price: 'Rs 5,000', link: 'product-detail.php', img: 'assets/images/ba017a87ff65aa4424f3158620d5d1b168f9d5f7.png' }
+];
+
+function handleHeaderLiveSearch(query) {
+    var resultsBox = document.getElementById('liveSearchResults');
+    if (!resultsBox) return;
+
+    var trimmedQuery = query.trim().toLowerCase();
+
+    if (trimmedQuery.length === 0) {
+        resultsBox.style.display = 'none';
+        resultsBox.innerHTML = '';
+        return;
+    }
+
+    var filtered = window.isaroGlobalSearchDB.filter(function(item) {
+        return item.title.toLowerCase().includes(trimmedQuery) || item.code.toLowerCase().includes(trimmedQuery);
+    });
+
+    if (filtered.length === 0) {
+        resultsBox.style.display = 'block';
+        resultsBox.innerHTML = '<div class="p-2 text-muted text-center fs-7" style="font-size: 0.8rem;">No products found</div>';
+        return;
+    }
+
+    var html = '';
+    filtered.forEach(function(item) {
+        html += `
+            <a href="${item.link}" class="dropdown-item d-flex align-items-center gap-2 py-2 px-2 rounded-2 text-decoration-none border-bottom">
+                <img src="${item.img}" alt="${item.title}" style="width: 35px; height: 35px; object-fit: contain; border-radius: 4px; border: 1px solid #eee;">
+                <div>
+                    <h6 class="fw-bold text-dark mb-0" style="font-size: 0.78rem; line-height: 1.2;">${item.title}</h6>
+                    <span class="text-muted" style="font-size: 0.68rem;">Code: ${item.code} | <strong class="text-danger">${item.price}</strong></span>
+                </div>
+            </a>
+        `;
+    });
+
+    resultsBox.style.display = 'block';
+    resultsBox.innerHTML = html;
+}
+
+// Close live search dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    var searchInput = document.getElementById('headerSearchInput');
+    var resultsBox = document.getElementById('liveSearchResults');
+    if (searchInput && resultsBox && !searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+        resultsBox.style.display = 'none';
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function() {
     const progressBar = document.getElementById("top-progress-bar");
 
@@ -695,43 +878,60 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 3. Scroll Reveal targets strictly starting from Special Offer (.offer-section) downwards
-    const revealTargets = document.querySelectorAll(
-        ".offer-section, .product-card, .product-card-box, .testimonials-section, .project-card-item, .project-grid-card, .vm-card, .team-card-item, .contact-info-card, .contact-img-box, .contact-map-box, .contact-form-wrapper"
-    );
-
-    function isInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.bottom >= 0
-        );
+    // 3. Live Header Wishlist Counter Badge Sync
+    function updateHeaderWishlistBadge() {
+        try {
+            var stored = localStorage.getItem('isaro_wishlist');
+            var count = stored ? JSON.parse(stored).length : 0;
+            var badge = document.getElementById('headerWishlistCount');
+            if (badge) {
+                badge.innerText = count;
+            }
+        } catch(e) {}
     }
+    updateHeaderWishlistBadge();
 
+   // UNIVERSAL & PRECISE SCROLL REVEAL OBSERVER
     const observerOptions = {
         root: null,
-        rootMargin: "0px 0px 80px 0px",
+        rootMargin: "0px 0px -40px 0px", 
         threshold: 0.05
     };
 
     const revealObserver = new IntersectionObserver(function(entries, observer) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
-                requestAnimationFrame(function() {
-                    entry.target.classList.add("is-revealed");
-                });
+                entry.target.classList.add("is-revealed");
                 observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    revealTargets.forEach(function(el) {
-        if (!isInViewport(el)) {
-            el.classList.add("reveal-on-scroll");
-            revealObserver.observe(el);
-        } else {
-            el.classList.add("is-revealed");
+    // Universal target for ALL pages including Footer and Grid elements
+    const animatableElements = document.querySelectorAll(
+        ".row > [class*='col-'] > div, .card, .contact-info-card, .contact-map-box, .contact-form-wrapper, .testimonials-section .p-4, .who-text-col, .pill-image-wrapper, .isaro-footer .col-12"
+    );
+
+    animatableElements.forEach(function(el) {
+        if(window.getComputedStyle(el).display === 'none') return;
+
+        el.classList.add("apple-reveal");
+        
+        let delay = 0;
+        let parentRow = el.closest('.row');
+        if (parentRow) {
+            let col = el.closest('[class*="col-"]');
+            if (col) {
+                let siblings = Array.from(parentRow.children);
+                let indexInRow = siblings.indexOf(col);
+                delay = (indexInRow % 4) * 0.12; 
+            }
         }
+        
+        el.style.transitionDelay = delay + 's';
+        revealObserver.observe(el);
     });
 });
 </script>
+</body>
+</html>

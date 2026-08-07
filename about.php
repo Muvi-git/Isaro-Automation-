@@ -1,4 +1,16 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+require_once 'config/db.php';
+
+// Fetch Team Members purely from Database (No hardcoded fallback arrays)
+$teamMembers = [];
+try {
+    $stmt = $pdo->query("SELECT * FROM team_members ORDER BY sort_order ASC, id DESC");
+    $teamMembers = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $teamMembers = [];
+}
+?>
 
 <!-- Page Specific Responsive & Figma Exact Styles -->
 <style>
@@ -11,7 +23,6 @@
 /* 1. Hero Section */
 .about-hero-section {
     position: relative;
-    /* IMAGE PLACEHOLDER: Hero Dark Industrial Background Image */
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg') center/cover no-repeat;
     min-height: 340px;
     display: flex;
@@ -118,13 +129,11 @@
 
 /* Vision Card Background */
 .vm-card-vision {
-    /* IMAGE PLACEHOLDER: Vision Background Image */
     background: linear-gradient(rgba(22, 24, 30, 0.78), rgba(22, 24, 30, 0.78)), url('assets/images/a79d7ea9dab8d052004fc56a5ef5adc16635039a.png') center/cover no-repeat;
 }
 
 /* Mission Card Background */
 .vm-card-mission {
-    /* IMAGE PLACEHOLDER: Mission Background Image */
     background: linear-gradient(rgba(22, 24, 30, 0.78), rgba(22, 24, 30, 0.78)), url('assets/images/e12a3b3b258b9e4daf5604024fb2355b4b03576b.png') center/cover no-repeat;
 }
 
@@ -160,7 +169,6 @@
 /* 4. Meet Our Team Section */
 .team-section {
     position: relative;
-    /* IMAGE PLACEHOLDER: Team Section Dark Background with Orange Robotic Arm */
     background: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('assets/images/67d12759ce882ac6dba72d274c24e0c3e3f0bc10.png') center/cover no-repeat;
     padding: 75px 0 85px 0;
     color: #ffffff;
@@ -305,24 +313,18 @@
                 <!-- 3 Vertical Capsule/Pill Images Right Side (Single Image Sliced Across 3 Pills) -->
                 <div class="col-12 col-lg-6">
                     <div class="row g-2 justify-content-center">
-                        <!-- Left Crop Pill -->
                         <div class="col-4">
                             <div class="pill-image-wrapper pill-1">
-                                <!-- IMAGE PLACEHOLDER: Single Wide Photo (Left Slice) -->
                                 <img src="assets/images/abfd49b7e97dcf378347005350484625b559a265 (2).png" alt="Who We Are Image Part 1">
                             </div>
                         </div>
-                        <!-- Center Crop Pill -->
                         <div class="col-4">
                             <div class="pill-image-wrapper pill-2">
-                                <!-- IMAGE PLACEHOLDER: Single Wide Photo (Center Slice) -->
                                 <img src="assets/images/abfd49b7e97dcf378347005350484625b559a265 (2).png" alt="Who We Are Image Part 2">
                             </div>
                         </div>
-                        <!-- Right Crop Pill -->
                         <div class="col-4">
                             <div class="pill-image-wrapper pill-3">
-                                <!-- IMAGE PLACEHOLDER: Single Wide Photo (Right Slice) -->
                                 <img src="assets/images/abfd49b7e97dcf378347005350484625b559a265 (2).png" alt="Who We Are Image Part 3">
                             </div>
                         </div>
@@ -336,7 +338,6 @@
     <section class="vm-section">
         <div class="container">
             <div class="row g-4 justify-content-center">
-                <!-- Vision Card -->
                 <div class="col-12 col-md-6 d-flex justify-content-center">
                     <div class="vm-card vm-card-vision">
                         <div class="vm-icon-circle">
@@ -349,7 +350,6 @@
                     </div>
                 </div>
 
-                <!-- Mission Card -->
                 <div class="col-12 col-md-6 d-flex justify-content-center">
                     <div class="vm-card vm-card-mission">
                         <div class="vm-icon-circle">
@@ -365,59 +365,29 @@
         </div>
     </section>
 
-    <!-- 4. MEET OUR TEAM SECTION -->
+    <!-- 4. MEET OUR TEAM SECTION (STRICTLY DYNAMIC FROM DATABASE) -->
     <section class="team-section">
         <div class="container">
             <h2 class="team-section-title">Meet Our Team</h2>
 
             <div class="row g-4">
-                <!-- Team Member 1 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="team-card-item">
-                        <div class="team-member-img-box">
-                            <!-- IMAGE PLACEHOLDER: Team Member 1 Photo -->
-                            <img src="assets/images/8ddca653cee53bdbac5ba4aa99d73f3a8ff5b08f.png" alt="Mr. A.P.L De Silva">
+                <?php if(!empty($teamMembers)): ?>
+                    <?php foreach($teamMembers as $tm): ?>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="team-card-item">
+                            <div class="team-member-img-box">
+                                <img src="<?php echo htmlspecialchars($tm['image']); ?>" alt="<?php echo htmlspecialchars($tm['name']); ?>">
+                            </div>
+                            <h4 class="team-member-name"><?php echo htmlspecialchars($tm['name']); ?></h4>
+                            <p class="team-member-desc"><?php echo htmlspecialchars($tm['designation'] ?? ''); ?></p>
                         </div>
-                        <h4 class="team-member-name">Mr. A.P.L De Silva</h4>
-                        <p class="team-member-desc">Lorem ipsum dolor sit amet, consectetur</p>
                     </div>
-                </div>
-
-                <!-- Team Member 2 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="team-card-item">
-                        <div class="team-member-img-box">
-                            <!-- IMAGE PLACEHOLDER: Team Member 2 Photo -->
-                            <img src="assets/images/d741ac1f4ec602ce2e6bdac3eec6c67c5a721c3e.png" alt="Mr. A.R.L Fernando">
-                        </div>
-                        <h4 class="team-member-name">Mr. A.R.L Fernando</h4>
-                        <p class="team-member-desc">Lorem ipsum dolor sit amet, consectetur</p>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="col-12 text-center">
+                        <p class="text-white mb-0">No team members available in database.</p>
                     </div>
-                </div>
-
-                <!-- Team Member 3 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="team-card-item">
-                        <div class="team-member-img-box">
-                            <!-- IMAGE PLACEHOLDER: Team Member 3 Photo -->
-                            <img src="assets/images/be97951335aaad04f3f035030fba071e1d69c703.png" alt="Mr. A.R.L De Silva">
-                        </div>
-                        <h4 class="team-member-name">Mr. A.R.L De Silva</h4>
-                        <p class="team-member-desc">Lorem ipsum dolor sit amet, consectetur</p>
-                    </div>
-                </div>
-
-                <!-- Team Member 4 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="team-card-item">
-                        <div class="team-member-img-box">
-                            <!-- IMAGE PLACEHOLDER: Team Member 4 Photo -->
-                            <img src="assets/images/5872a08cd669c3cadda08e29a9ba3eff4d6a5c52.png" alt="Mr. A.R.L De Silva">
-                        </div>
-                        <h4 class="team-member-name">Mr. A.R.L De Silva</h4>
-                        <p class="team-member-desc">Lorem ipsum dolor sit amet, consectetur</p>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>

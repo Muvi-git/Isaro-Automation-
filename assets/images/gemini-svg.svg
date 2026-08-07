@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="128" height="128">
+  <defs>
+    <linearGradient id="isaroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#800c3b"/>
+      <stop offset="50%" stop-color="#c71585"/>
+      <stop offset="100%" stop-color="#e65c9c"/>
+    </linearGradient>
+  </defs>
+  <!-- Circle Background -->
+  <circle cx="50" cy="50" r="48" fill="url(#isaroBg)" stroke="#ffffff" stroke-width="2"/>
+  <!-- Top Dot -->
+  <circle cx="50" cy="22" r="7" fill="#ffd700" stroke="#333333" stroke-width="0.8"/>
+  <circle cx="50" cy="22" r="3.2" fill="#000000"/>
+  <!-- Yellow Wave Lines -->
+  <polyline points="12,47 40,47 50,28 62,75 72,54 88,47" fill="none" stroke="#ffd700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="12,54 38,54 50,35 62,82 72,61 88,54" fill="none" stroke="#ffd700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -55,7 +55,7 @@
                 <h5 class="text-white fw-medium mb-3 fs-5">Subscribe</h5>
                 <form action="#" method="POST">
                     <div class="position-relative" style="max-width: 230px;">
-                        <input type="email" class="form-control bg-transparent text-white rounded-1 py-2 pe-5 isaro-subscribe-input" placeholder="Enter your email" required style="font-size: 0.82rem; border: 1px solid #777;">
+                        <input type="email" name="subscribe_email" class="form-control bg-transparent text-white rounded-1 py-2 pe-5 isaro-subscribe-input" placeholder="Enter your email" required style="font-size: 0.82rem; border: 1px solid #777;">
                         <button class="btn border-0 text-white position-absolute end-0 top-50 translate-middle-y px-3 isaro-sub-btn" type="submit" style="background: transparent;">
                             <i class="far fa-paper-plane" style="font-size: 1rem;"></i>
                         </button>
@@ -81,8 +81,8 @@
                 <div class="d-flex align-items-start">
                     <i class="fas fa-phone-alt text-white fs-5 me-3 mt-1" style="transform: scaleX(-1);"></i>
                     <div class="text-white-50" style="font-size: 0.85rem; line-height: 1.5;">
-                        + 94 11 4011784<br>
-                        + 94 11 4216784
+                        <a href="tel:+94114011784" class="text-white-50 text-decoration-none">+ 94 11 4011784</a><br>
+                        <a href="tel:+94114216784" class="text-white-50 text-decoration-none">+ 94 11 4216784</a>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                 <ul class="list-unstyled mb-0 d-flex flex-column gap-2" style="font-size: 0.88rem;">
                     <li><a href="#" class="text-white-50 text-decoration-none isaro-footer-link">Privacy Policy</a></li>
                     <li><a href="#" class="text-white-50 text-decoration-none isaro-footer-link">Terms Of Use</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none isaro-footer-link">FAQ</a></li>
+                    <li><a href="faq.php" class="text-white-50 text-decoration-none isaro-footer-link">FAQ</a></li>
                     <li><a href="contact.php" class="text-white-50 text-decoration-none isaro-footer-link">Contact</a></li>
                 </ul>
             </div>

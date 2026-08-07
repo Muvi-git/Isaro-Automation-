@@ -1,4 +1,34 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+require_once 'config/db.php';
+
+// 1. Fetch Recent / Featured Projects strictly from Database
+$recentProjects = [];
+try {
+    $recStmt = $pdo->query("SELECT * FROM projects WHERE is_recent = 1 ORDER BY id DESC LIMIT 3");
+    $recentProjects = $recStmt->fetchAll();
+    if (empty($recentProjects)) {
+        $recStmt = $pdo->query("SELECT * FROM projects ORDER BY id DESC LIMIT 3");
+        $recentProjects = $recStmt->fetchAll();
+    }
+} catch (PDOException $e) {
+    $recentProjects = [];
+}
+
+// Separate large featured and small stacked recent projects
+$largeRecent = $recentProjects[0] ?? null;
+$smallRecent1 = $recentProjects[1] ?? null;
+$smallRecent2 = $recentProjects[2] ?? null;
+
+// 2. Fetch All Projects strictly from Database for the Grid Section
+$allProjects = [];
+try {
+    $allStmt = $pdo->query("SELECT * FROM projects ORDER BY id DESC");
+    $allProjects = $allStmt->fetchAll();
+} catch (PDOException $e) {
+    $allProjects = [];
+}
+?>
 
 <!-- Page Specific Responsive & Figma Exact Styles -->
 <style>
@@ -12,7 +42,6 @@
 /* 1. Hero Section */
 .projects-hero-section {
     position: relative;
-    /* IMAGE PLACEHOLDER: Hero Dark Industrial Background Image */
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg') center/cover no-repeat;
     min-height: 340px;
     display: flex;
@@ -21,12 +50,15 @@
     text-align: center;
 }
 
+/* Apple-Style Hero Entrance Animation */
 .projects-hero-title {
     color: #ff0000;
     font-size: 2.8rem;
     font-weight: 700;
     margin-bottom: 15px;
     letter-spacing: -0.5px;
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
 }
 
 .projects-hero-p {
@@ -36,7 +68,13 @@
     max-width: 820px;
     margin: 0 auto;
     font-weight: 300;
-    opacity: 0.9;
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+@keyframes appleHeroText {
+    0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* 2. Recent Projects Section */
@@ -57,6 +95,13 @@
     overflow: hidden;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     width: 100%;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recent-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2) !important;
 }
 
 .recent-card-large {
@@ -114,6 +159,18 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e2e2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.project-grid-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    border-color: #b03030 !important;
 }
 
 .project-img-box {
@@ -132,6 +189,11 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    transition: transform 0.4s ease;
+}
+
+.project-grid-card:hover .project-img-box img {
+    transform: scale(1.05);
 }
 
 .project-grid-title {
@@ -189,163 +251,78 @@
             <div class="row g-4 align-items-stretch">
                 <!-- Left Column: Large Featured Project -->
                 <div class="col-12 col-lg-6">
-                    <div class="recent-card recent-card-large">
-                        <!-- IMAGE PLACEHOLDER: Technician Orange Helmet Integration -->
-                        <img src="assets/images/2f9058cda797988dc0788f626d5eb70c856ef2bb.png" alt="Smart Factory PLC Integration">
+                    <?php if($largeRecent): ?>
+                    <div class="recent-card recent-card-large" onclick="window.location.href='project-detail.php?id=<?php echo $largeRecent['id']; ?>'">
+                        <img src="<?php echo htmlspecialchars($largeRecent['main_img']); ?>" alt="<?php echo htmlspecialchars($largeRecent['title']); ?>">
                         <div class="recent-overlay">
-                            <h3 class="recent-title">Smart Factory PLC Integration</h3>
+                            <h3 class="recent-title"><?php echo htmlspecialchars($largeRecent['title']); ?></h3>
                             <p class="recent-desc">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
+                                <?php echo htmlspecialchars($largeRecent['short_desc']); ?>
                             </p>
                         </div>
                     </div>
+                    <?php else: ?>
+                    <div class="recent-card recent-card-large d-flex align-items-center justify-content-center bg-white border">
+                        <p class="text-muted mb-0">No recent project found.</p>
+                    </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Right Column: 2 Small Stacked Featured Projects -->
                 <div class="col-12 col-lg-6 d-flex flex-column justify-content-between gap-4">
                     <!-- Featured Small 1 -->
-                    <div class="recent-card recent-card-small">
-                        <!-- IMAGE PLACEHOLDER: Hydraulic Press Control Top View -->
-                        <img src="assets/images/7e3d191a15ac23b17a1f8a34d1a0cbed7c03be85.jpg" alt="Automated Hydraulic Press Control">
+                    <?php if($smallRecent1): ?>
+                    <div class="recent-card recent-card-small" onclick="window.location.href='project-detail.php?id=<?php echo $smallRecent1['id']; ?>'">
+                        <img src="<?php echo htmlspecialchars($smallRecent1['main_img']); ?>" alt="<?php echo htmlspecialchars($smallRecent1['title']); ?>">
                         <div class="recent-overlay">
-                            <h3 class="recent-title">Automated Hydraulic Press Control</h3>
+                            <h3 class="recent-title"><?php echo htmlspecialchars($smallRecent1['title']); ?></h3>
                             <p class="recent-desc">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
+                                <?php echo htmlspecialchars($smallRecent1['short_desc']); ?>
                             </p>
                         </div>
                     </div>
+                    <?php endif; ?>
 
                     <!-- Featured Small 2 -->
-                    <div class="recent-card recent-card-small">
-                        <!-- IMAGE PLACEHOLDER: Pneumatic Conveyor Line Wiring -->
-                        <img src="assets/images/c84739eb2ed88a5d12b5a4eaa2f2b5d9cc173fe8.jpg" alt="Pneumatic Conveyor Line Setup">
+                    <?php if($smallRecent2): ?>
+                    <div class="recent-card recent-card-small" onclick="window.location.href='project-detail.php?id=<?php echo $smallRecent2['id']; ?>'">
+                        <img src="<?php echo htmlspecialchars($smallRecent2['main_img']); ?>" alt="<?php echo htmlspecialchars($smallRecent2['title']); ?>">
                         <div class="recent-overlay">
-                            <h3 class="recent-title">Pneumatic Conveyor Line Setup</h3>
+                            <h3 class="recent-title"><?php echo htmlspecialchars($smallRecent2['title']); ?></h3>
                             <p class="recent-desc">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
+                                <?php echo htmlspecialchars($smallRecent2['short_desc']); ?>
                             </p>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. ALL PROJECTS GRID SECTION (8 ITEMS) -->
+    <!-- 3. ALL PROJECTS GRID SECTION -->
     <section class="all-projects-section">
         <div class="container">
             <div class="row g-4">
-                <!-- Item 1 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: Wiring Board Technician -->
-                            <img src="assets/images/e0ba8d58efa004b1ac9afae79bf8c83837b8b6b9.png" alt="Smart Factory PLC Integration">
+                <?php if(!empty($allProjects)): ?>
+                    <?php foreach($allProjects as $proj): ?>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="project-grid-card" onclick="window.location.href='project-detail.php?id=<?php echo $proj['id']; ?>'">
+                            <div class="project-img-box">
+                                <img src="<?php echo htmlspecialchars($proj['main_img']); ?>" alt="<?php echo htmlspecialchars($proj['title']); ?>">
+                            </div>
+                            <h4 class="project-grid-title"><?php echo htmlspecialchars($proj['title']); ?></h4>
+                            <p class="project-grid-desc">
+                                <?php echo htmlspecialchars($proj['short_desc']); ?>
+                            </p>
                         </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
                     </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: White Cabinet Technician -->
-                            <img src="assets/images/abfe2a759945e5458aa42bb255a9f6a4c17ab686.png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">No projects found in database.</p>
                     </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: Orange Helmet Technician -->
-                            <img src="assets/images/2f9058cda797988dc0788f626d5eb70c856ef2bb.png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: Top View Control Panel -->
-                            <img src="assets/images/71455c53cbed251be21bbb31286a64a1ebe232e4.png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: Server Rack Engineers -->
-                            <img src="assets/images/6ddd2e4b4912893a72b5141fd2dfd674ee5a7268.png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: Yellow Testing Device Technician -->
-                            <img src="assets/images/2eaf6daacbcfeb54ef8944e2eb85c527772da507 (1).png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Item 7 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: Tablet Electrical Cabinet Engineer -->
-                            <img src="assets/images/bbec571feac962f13fe6f2847521cc5041768c9c.png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Item 8 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="project-grid-card">
-                        <div class="project-img-box">
-                            <!-- IMAGE PLACEHOLDER: White Helmet Tablet Inspector -->
-                            <img src="assets/images/2a46fe30f446fe133675852222bb75faeab163a9.png" alt="Smart Factory PLC Integration">
-                        </div>
-                        <h4 class="project-grid-title">Smart Factory PLC Integration</h4>
-                        <p class="project-grid-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                        </p>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -356,5 +333,39 @@
     </a>
 
 </div>
+
+<!-- Custom Sequential Scroll Reveal for Projects Page -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const observerOptions = { root: null, rootMargin: "0px 0px -40px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // 1. Recent Projects Section Custom Stagger
+    document.querySelectorAll('.recent-card').forEach((card, index) => {
+        card.classList.add('apple-reveal');
+        card.style.transitionDelay = (index * 0.15) + 's';
+        revealObserver.observe(card);
+    });
+
+    // 2. All Projects Grid Section Custom Stagger (L to R)
+    document.querySelectorAll('.all-projects-section .row').forEach(row => {
+        Array.from(row.children).forEach((col, index) => {
+            const card = col.querySelector('.project-grid-card');
+            if(card) {
+                card.classList.add('apple-reveal');
+                card.style.transitionDelay = ((index % 4) * 0.15) + 's';
+                revealObserver.observe(card);
+            }
+        });
+    });
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

@@ -1,4 +1,33 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+require_once 'config/db.php';
+
+$form_success = false;
+$form_error = '';
+
+// Handle Contact Form Submission to Database
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $first_name = trim($_POST['first_name'] ?? '');
+    $last_name = trim($_POST['last_name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+
+    $full_name = trim($first_name . ' ' . $last_name);
+
+    if (!empty($full_name) && !empty($email) && !empty($message)) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO inquiries (full_name, email, phone, message) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$full_name, $email, $phone, $message]);
+            $form_success = true;
+        } catch (PDOException $e) {
+            $form_error = 'Error submitting inquiry. Please try again.';
+        }
+    } else {
+        $form_error = 'Please fill in all required fields.';
+    }
+}
+?>
 
 <!-- Page Specific Responsive & Figma Exact Styles -->
 <style>
@@ -426,7 +455,19 @@
                         <div>
                             <h2 class="form-section-title">Mention Your Question Here!</h2>
 
-                            <form action="" method="POST" class="contact-form">
+                            <?php if($form_success): ?>
+                                <div class="alert alert-success py-2 text-center rounded-3 mb-4" style="font-size: 0.85rem;">
+                                    <i class="fas fa-check-circle me-1"></i> Thank you! Your message has been saved successfully.
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if(!empty($form_error)): ?>
+                                <div class="alert alert-danger py-2 text-center rounded-3 mb-4" style="font-size: 0.85rem;">
+                                    <i class="fas fa-exclamation-circle me-1"></i> <?php echo $form_error; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <form action="contact.php" method="POST" class="contact-form">
                                 <div class="row g-4">
                                     <!-- First Name -->
                                     <div class="col-12 col-sm-6">

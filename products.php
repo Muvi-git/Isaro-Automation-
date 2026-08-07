@@ -1,4 +1,48 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+require_once 'config/db.php';
+
+// 1. Fetch Categories for Dropdown strictly from Database
+$categories = [];
+try {
+    $catStmt = $pdo->query("SELECT * FROM categories WHERE status='active' ORDER BY name ASC");
+    $categories = $catStmt->fetchAll();
+} catch (PDOException $e) {
+    $categories = [];
+}
+
+// 2. Fetch Filtered/All Products strictly from Database
+$cat_slug = isset($_GET['cat']) ? trim($_GET['cat']) : '';
+$dbProducts = [];
+
+try {
+    if (!empty($cat_slug)) {
+        $stmt = $pdo->prepare("SELECT p.*, c.slug as cat_slug FROM products p JOIN categories c ON p.category_id = c.id WHERE c.slug = ? ORDER BY p.id DESC");
+        $stmt->execute([$cat_slug]);
+    } else {
+        $stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
+    }
+    $dbProducts = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $dbProducts = [];
+}
+
+// Split DB Products into Grid 1 (First 8) and Grid 2 (Remaining) to preserve exact Figma Banner layout
+$grid1Products = array_slice($dbProducts, 0, 8);
+$grid2Products = array_slice($dbProducts, 8);
+
+// 3. Fetch New Arrivals strictly from Database
+$newArrivals = [];
+try {
+    $newStmt = $pdo->query("SELECT * FROM products WHERE is_new_arrival = 1 ORDER BY id DESC LIMIT 10");
+    $newArrivals = $newStmt->fetchAll();
+    if (empty($newArrivals) && !empty($dbProducts)) {
+        $newArrivals = array_slice($dbProducts, 0, 6);
+    }
+} catch (PDOException $e) {
+    $newArrivals = [];
+}
+?>
 
 <!-- Page Specific Responsive & Figma Exact Styles -->
 <style>
@@ -12,7 +56,6 @@
 /* 1. Hero Section */
 .products-hero-section {
     position: relative;
-    /* IMAGE PLACEHOLDER: Hero Dark Industrial Background Image */
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg') center/cover no-repeat;
     min-height: 340px;
     display: flex;
@@ -21,12 +64,15 @@
     text-align: center;
 }
 
+/* Apple-Style Hero Entrance Animation */
 .products-hero-title {
     color: #ff0000;
     font-size: 2.8rem;
     font-weight: 700;
     margin-bottom: 15px;
     letter-spacing: -0.5px;
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
 }
 
 .products-hero-p {
@@ -36,7 +82,13 @@
     max-width: 820px;
     margin: 0 auto;
     font-weight: 300;
-    opacity: 0.9;
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+@keyframes appleHeroText {
+    0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* 2. Products Section Header & Filter */
@@ -63,7 +115,7 @@
     cursor: pointer;
 }
 
-/* Perfect Product Cards Styling */
+/* Perfect Product Cards Styling with Full Box Clickable */
 .product-card {
     background: #ffffff;
     border-radius: 12px;
@@ -75,15 +127,16 @@
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
 }
 
 .product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    border-color: #b03030 !important;
 }
 
-/* Fixed Image Box Container - Edge-to-Edge Fill */
 .product-img-box {
     width: 100%;
     height: 180px;
@@ -102,7 +155,6 @@
     display: block;
 }
 
-/* Content & Title Equalization */
 .product-content-box {
     display: flex;
     flex-direction: column;
@@ -134,7 +186,7 @@
     background-color: #b03030;
     color: #ffffff;
     border: none;
-    padding: 7px 22px;
+    padding: 7px 18px;
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 4px;
@@ -149,7 +201,28 @@
     transform: translateY(-2px);
 }
 
-/* 3. Red Category Banner Section (Perfect Constrained Proportions) */
+.btn-compare-card {
+    background-color: #ffffff;
+    color: #b03030;
+    border: 1px solid #b03030;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.btn-compare-card:hover {
+    background-color: #b03030;
+    color: #ffffff;
+}
+
+/* 3. Red Category Banner Section */
 .category-banner-section {
     background-color: #b03030;
     padding: 55px 0;
@@ -159,13 +232,13 @@
 .category-banner-card {
     text-align: center;
     width: 100%;
-    max-width: 330px; /* Prevents cards from stretching too wide on desktop */
+    max-width: 330px;
     margin: 0 auto;
 }
 
 .category-banner-img {
     width: 100%;
-    height: 210px; /* Balanced height for exact Figma look */
+    height: 210px;
     border-radius: 18px;
     overflow: hidden;
     margin-bottom: 15px;
@@ -213,7 +286,6 @@
     flex: 0 0 auto;
 }
 
-/* Responsiveness Fine-Tuning */
 @media (max-width: 991.98px) {
     .products-hero-title { font-size: 2.2rem; }
     .products-main-title, .new-arrivals-title { font-size: 1.8rem; }
@@ -254,176 +326,53 @@
                         Categories
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">All Categories</a></li>
-                        <li><a class="dropdown-item" href="#">Electrical & Electronics</a></li>
-                        <li><a class="dropdown-item" href="#">Pneumatic Products</a></li>
-                        <li><a class="dropdown-item" href="#">Hydraulic Products</a></li>
+                        <li><a class="dropdown-item" href="products.php">All Categories</a></li>
+                        <?php if(!empty($categories)): ?>
+                            <?php foreach($categories as $cat): ?>
+                            <li><a class="dropdown-item" href="products.php?cat=<?php echo htmlspecialchars($cat['slug']); ?>"><?php echo htmlspecialchars($cat['name']); ?></a></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
 
-            <!-- Product Grid 1 (Row 1 & 2) -->
+            <!-- Product Grid 1 (Strictly Dynamic Database Items) -->
             <div class="row g-4">
-                <!-- Item 1 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Digital Panel Meter -->
-                            <img src="assets/images/b432d96cfa8f80614741d6f26ee4c84e73ec4f86.png" alt="Digital Panel Meters">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Digital Panel Meters</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
+                <?php if(!empty($grid1Products)): ?>
+                    <?php foreach($grid1Products as $p): ?>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $p['id']; ?>')">
+                            <div class="product-img-box">
+                                <img src="<?php echo htmlspecialchars($p['main_img']); ?>" alt="<?php echo htmlspecialchars($p['title']); ?>">
                             </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Pressure Regulator -->
-                            <img src="assets/images/811821004797026ac18c9a115f1b50578adfd1d1 (1).png" alt="Pressure Regulator">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Pressure Regulator</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
+                            <div class="product-content-box">
+                                <div>
+                                    <h4 class="product-title"><?php echo htmlspecialchars($p['title']); ?></h4>
+                                    <p class="product-desc"><?php echo htmlspecialchars($p['short_desc'] ?? ''); ?></p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a href="product-detail.php?id=<?php echo $p['id']; ?>" class="btn-more-details" onclick="event.stopPropagation()">More Details</a>
+                                    <button type="button" class="btn-compare-card" onclick="addToCompare(event, '<?php echo htmlspecialchars($p['title']); ?>', '<?php echo htmlspecialchars($p['sku']); ?>', 'Rs <?php echo number_format($p['price'], 0); ?>', '<?php echo htmlspecialchars($p['main_img']); ?>')" title="Compare Product">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Hand Valve Pneumatic -->
-                            <img src="assets/images/59935624d6a0605b083cee98e98ab5367e12f66d (1).png" alt="Hand Valve">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Hand Valve</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="col-12 text-center py-4">
+                        <p class="text-muted mb-0">No products found in database.</p>
                     </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Hydraulic Cylinders -->
-                            <img src="assets/images/d5383f22ac03dc846865eaef9c1961bdefea7a5e (1).png" alt="Hydraulic Cylinders">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Hydraulic Cylinders</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Hand Valve Pneumatic -->
-                            <img src="assets/images/ceac3043d20c17c0f960b25773684b03e09b887a.png" alt="Hand Valve">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Hand Valve</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Hydraulic Cylinders -->
-                            <img src="assets/images/67c202614336eaa91093ee58d47edba33f742723.png" alt="Hydraulic Cylinders">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Hydraulic Cylinders</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 7 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Programmable Terminals Display -->
-                            <img src="assets/images/2bd82bccc12a674da93024bcfa909e92c9856c96.png" alt="Programmable Terminals">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Programmable Terminals</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 8 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <!-- IMAGE PLACEHOLDER: Pressure Regulator -->
-                            <img src="assets/images/bd04ef460ec093b3f1760e46ef26e0936acaee06.png" alt="Pressure Regulator">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Pressure Regulator</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
-    <!-- 3. RED CATEGORY HIGHLIGHT BANNER SECTION (FIXED BOX PROPORTIONS) -->
+    <!-- 3. RED CATEGORY HIGHLIGHT BANNER SECTION -->
     <section class="category-banner-section">
         <div class="container">
             <div class="row g-4 justify-content-center">
-                <!-- Banner Item 1: Electrical & Electronics -->
                 <div class="col-12 col-md-4 d-flex justify-content-center">
                     <div class="category-banner-card">
                         <div class="category-banner-img">
@@ -433,7 +382,6 @@
                     </div>
                 </div>
 
-                <!-- Banner Item 2: Pneumatic Products -->
                 <div class="col-12 col-md-4 d-flex justify-content-center">
                     <div class="category-banner-card">
                         <div class="category-banner-img">
@@ -443,7 +391,6 @@
                     </div>
                 </div>
 
-                <!-- Banner Item 3: Hydraulic Products -->
                 <div class="col-12 col-md-4 d-flex justify-content-center">
                     <div class="category-banner-card">
                         <div class="category-banner-img">
@@ -456,270 +403,68 @@
         </div>
     </section>
 
-    <!-- 4. SECOND PRODUCTS GRID -->
+    <!-- 4. SECOND PRODUCTS GRID (Strictly Dynamic Database Items) -->
+    <?php if(!empty($grid2Products)): ?>
     <section class="products-main-section">
         <div class="container">
             <div class="row g-4">
-                <!-- Item 9 -->
+                <?php foreach($grid2Products as $p): ?>
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
+                    <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $p['id']; ?>')">
                         <div class="product-img-box">
-                            <img src="assets/images/053219ad68445b8c69f01a1095e7e31846d4af0d.png" alt="Digital Panel Meters">
+                            <img src="<?php echo htmlspecialchars($p['main_img']); ?>" alt="<?php echo htmlspecialchars($p['title']); ?>">
                         </div>
                         <div class="product-content-box">
                             <div>
-                                <h4 class="product-title">Digital Panel Meters</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
+                                <h4 class="product-title"><?php echo htmlspecialchars($p['title']); ?></h4>
+                                <p class="product-desc"><?php echo htmlspecialchars($p['short_desc'] ?? ''); ?></p>
                             </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
+                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                <a href="product-detail.php?id=<?php echo $p['id']; ?>" class="btn-more-details" onclick="event.stopPropagation()">More Details</a>
+                                <button type="button" class="btn-compare-card" onclick="addToCompare(event, '<?php echo htmlspecialchars($p['title']); ?>', '<?php echo htmlspecialchars($p['sku']); ?>', 'Rs <?php echo number_format($p['price'], 0); ?>', '<?php echo htmlspecialchars($p['main_img']); ?>')" title="Compare Product">
+                                    <i class="fas fa-balance-scale"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Item 10 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/bd04ef460ec093b3f1760e46ef26e0936acaee06 (1).png" alt="Pressure Regulator">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Pressure Regulator</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 11 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/251fffe4bfeeb2b5ea07a9f20897b874b55fa31e.png" alt="Hand Valve">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Hand Valve</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 12 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/c044e1c761f7086a2d5e4441c321b7286ae6a65a.png" alt="Hydraulic Cylinders">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Hydraulic Cylinders</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 13 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/b432d96cfa8f80614741d6f26ee4c84e73ec4f86 (1).png" alt="Programmable Logic controller">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Programmable Logic controller</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 14 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/811821004797026ac18c9a115f1b50578adfd1d1 (1).png" alt="Programmable Logic controller">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Programmable Logic controller</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 15 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/59935624d6a0605b083cee98e98ab5367e12f66d (1).png" alt="Programmable Terminals">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Programmable Terminals</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 16 -->
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            <img src="assets/images/d5383f22ac03dc846865eaef9c1961bdefea7a5e (1).png" alt="Digital Panel Meters">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h4 class="product-title">Digital Panel Meters</h4>
-                                <p class="product-desc">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus varius Cras volutpat tincidunt cursus nulla, Nam viverra sit elit lobortis, placerat et non ex</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
-    <!-- 5. NEW ARRIVALS HORIZONTAL SCROLL SECTION -->
+    <!-- 5. NEW ARRIVALS HORIZONTAL SCROLL SECTION (Strictly Dynamic Database Items) -->
     <section class="new-arrivals-section">
         <div class="container">
             <h3 class="new-arrivals-title">New Arrivals</h3>
 
             <div class="new-arrivals-scroll">
-                <!-- Scroll Item 1 -->
-                <div class="new-arrivals-card">
-                    <div class="product-card">
-                        <div class="product-img-box" style="height: 120px;">
-                            <img src="assets/images/811821004797026ac18c9a115f1b50578adfd1d1 (1).png" alt="Hand Valve">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;">Hand Valve</h5>
-                                <p class="product-desc" style="font-size: 0.65rem;">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus</p>
+                <?php if(!empty($newArrivals)): ?>
+                    <?php foreach($newArrivals as $np): ?>
+                    <div class="new-arrivals-card">
+                        <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $np['id']; ?>')">
+                            <div class="product-img-box" style="height: 120px;">
+                                <img src="<?php echo htmlspecialchars($np['main_img']); ?>" alt="<?php echo htmlspecialchars($np['title']); ?>">
                             </div>
-                            <div>
-                                <a href="#" class="btn-more-details" style="padding: 4px 14px; font-size: 0.68rem;">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scroll Item 2 -->
-                <div class="new-arrivals-card">
-                    <div class="product-card">
-                        <div class="product-img-box" style="height: 120px;">
-                            <img src="assets/images/b432d96cfa8f80614741d6f26ee4c84e73ec4f86 (1).png" alt="Hydraulic Cylinders">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;">Hydraulic Cylinders</h5>
-                                <p class="product-desc" style="font-size: 0.65rem;">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details" style="padding: 4px 14px; font-size: 0.68rem;">More Details</a>
+                            <div class="product-content-box">
+                                <div>
+                                    <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;"><?php echo htmlspecialchars($np['title']); ?></h5>
+                                    <p class="product-desc" style="font-size: 0.65rem;"><?php echo htmlspecialchars(substr($np['short_desc'] ?? '', 0, 50)); ?></p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center gap-1">
+                                    <a href="product-detail.php?id=<?php echo $np['id']; ?>" class="btn-more-details" style="padding: 4px 10px; font-size: 0.68rem;" onclick="event.stopPropagation()">More Details</a>
+                                    <button type="button" class="btn-compare-card" style="padding: 4px 8px; font-size: 0.68rem;" onclick="addToCompare(event, '<?php echo htmlspecialchars($np['title']); ?>', '<?php echo htmlspecialchars($np['sku']); ?>', 'Rs <?php echo number_format($np['price'], 0); ?>', '<?php echo htmlspecialchars($np['main_img']); ?>')" title="Compare">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Scroll Item 3 -->
-                <div class="new-arrivals-card">
-                    <div class="product-card">
-                        <div class="product-img-box" style="height: 120px;">
-                            <img src="assets/images/c044e1c761f7086a2d5e4441c321b7286ae6a65a.png" alt="Programmable Terminals">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;">Programmable Terminals</h5>
-                                <p class="product-desc" style="font-size: 0.65rem;">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details" style="padding: 4px 14px; font-size: 0.68rem;">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scroll Item 4 -->
-                <div class="new-arrivals-card">
-                    <div class="product-card">
-                        <div class="product-img-box" style="height: 120px;">
-                            <img src="assets/images/2bd82bccc12a674da93024bcfa909e92c9856c96.png" alt="Pressure Regulator">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;">Pressure Regulator</h5>
-                                <p class="product-desc" style="font-size: 0.65rem;">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details" style="padding: 4px 14px; font-size: 0.68rem;">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scroll Item 5 -->
-                <div class="new-arrivals-card">
-                    <div class="product-card">
-                        <div class="product-img-box" style="height: 120px;">
-                            <img src="assets/images/67c202614336eaa91093ee58d47edba33f742723.png" alt="Programmable Logic controller">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;">Programmable Logic controller</h5>
-                                <p class="product-desc" style="font-size: 0.65rem;">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details" style="padding: 4px 14px; font-size: 0.68rem;">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scroll Item 6 -->
-                <div class="new-arrivals-card">
-                    <div class="product-card">
-                        <div class="product-img-box" style="height: 120px;">
-                            <img src="assets/images/ceac3043d20c17c0f960b25773684b03e09b887a.png" alt="Programmable Logic controller">
-                        </div>
-                        <div class="product-content-box">
-                            <div>
-                                <h5 class="product-title" style="font-size: 0.8rem; min-height: 2.2em;">Programmable Logic controller</h5>
-                                <p class="product-desc" style="font-size: 0.65rem;">diam placerat dignissim, Donec Cras non porta Lorem feugiat nec maximus</p>
-                            </div>
-                            <div>
-                                <a href="#" class="btn-more-details" style="padding: 4px 14px; font-size: 0.68rem;">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted small mb-0">No new arrivals in database.</p>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -730,5 +475,92 @@
     </a>
 
 </div>
+
+<!-- Navigation, Compare & Perfect Scroll Reveal Script -->
+<script>
+function navigateToDetail(event, url) {
+    if (event.target.closest('button') || event.target.closest('a')) {
+        return;
+    }
+    window.location.href = url;
+}
+
+function addToCompare(event, title, code, price, img) {
+    event.stopPropagation();
+    var stored = localStorage.getItem('isaro_compare');
+    var list = stored ? JSON.parse(stored) : [];
+    
+    var exists = list.some(function(item) { return item.sku === code || item.title === title; });
+    if (exists) {
+        if (confirm(title + ' is already in your comparison list! Do you want to view the comparison page now?')) {
+            window.location.href = 'compare.php';
+        }
+        return;
+    }
+    
+    if (list.length >= 4) {
+        alert('You can compare a maximum of 4 products at a time.');
+        return;
+    }
+
+    list.push({
+        id: Date.now().toString(),
+        title: title,
+        sku: code,
+        price: price,
+        img: img
+    });
+
+    localStorage.setItem('isaro_compare', JSON.stringify(list));
+    
+    if (confirm('✔ ' + title + ' added to comparison list! Do you want to view the comparison page now?')) {
+        window.location.href = 'compare.php';
+    }
+}
+
+// Custom Sequential Scroll Reveal for Products Page
+document.addEventListener("DOMContentLoaded", function() {
+    const observerOptions = { root: null, rootMargin: "0px 0px -40px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // 1. Grid Products Staggering (Strictly L to R)
+    document.querySelectorAll('.products-main-section .row').forEach(row => {
+        Array.from(row.children).forEach((col, index) => {
+            const card = col.querySelector('.product-card');
+            if(card) {
+                card.classList.add('apple-reveal');
+                card.style.transitionDelay = ((index % 4) * 0.15) + 's';
+                revealObserver.observe(card);
+            }
+        });
+    });
+
+    // 2. Category Banners Staggering
+    document.querySelectorAll('.category-banner-section .row').forEach(row => {
+        Array.from(row.children).forEach((col, index) => {
+            const card = col.querySelector('.category-banner-card');
+            if(card) {
+                card.classList.add('apple-reveal');
+                card.style.transitionDelay = ((index % 3) * 0.15) + 's';
+                revealObserver.observe(card);
+            }
+        });
+    });
+
+    // 3. New Arrivals Horizontal Staggering
+    document.querySelectorAll('.new-arrivals-card .product-card').forEach((card, index) => {
+        card.classList.add('apple-reveal');
+        card.style.transitionDelay = ((index % 10) * 0.1) + 's';
+        revealObserver.observe(card);
+    });
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

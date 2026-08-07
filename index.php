@@ -1,4 +1,33 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+require_once 'config/db.php';
+
+// 1. Fetch Active Offers strictly from Database
+$offersStmt = $pdo->query("SELECT * FROM offers WHERE status='active' ORDER BY sort_order ASC, id DESC");
+$dbOffers = $offersStmt->fetchAll();
+
+// 2. Fetch Products strictly from Database (Limit 8 for Home Page)
+$productsStmt = $pdo->query("SELECT * FROM products ORDER BY is_featured DESC, id DESC LIMIT 8");
+$dbProducts = $productsStmt->fetchAll();
+
+// 3. Fetch Approved Reviews strictly from Database (Limit 2)
+$reviewsStmt = $pdo->query("SELECT * FROM product_reviews WHERE is_approved=1 ORDER BY id DESC LIMIT 2");
+$dbReviews = $reviewsStmt->fetchAll();
+
+// 4. Fetch Projects strictly from Database (Limit 4)
+$projectsStmt = $pdo->query("SELECT * FROM projects ORDER BY is_recent DESC, id DESC LIMIT 4");
+$dbProjects = $projectsStmt->fetchAll();
+
+// Curated Distinct High-Quality Real Human Face Avatars Array
+$faceAvatars = [
+    'https://randomuser.me/api/portraits/men/32.jpg',
+    'https://randomuser.me/api/portraits/men/46.jpg',
+    'https://randomuser.me/api/portraits/men/75.jpg',
+    'https://randomuser.me/api/portraits/women/44.jpg',
+    'https://randomuser.me/api/portraits/men/85.jpg',
+    'https://randomuser.me/api/portraits/women/68.jpg'
+];
+?>
 
 <!-- Comprehensive Responsive & Premium Design CSS -->
 <style>
@@ -83,6 +112,7 @@
     background: #ffffff;
     height: 100%;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
 }
 .product-card-box:hover {
     transform: translateY(-6px);
@@ -101,8 +131,10 @@
     justify-content: center;
     font-size: 0.8rem;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
-.product-action-btn:hover {
+.product-action-btn:hover,
+.product-action-btn.active {
     background: #c82333;
     color: #ffffff !important;
     border-color: #c82333;
@@ -110,8 +142,8 @@
 
 /* Testimonial Section Adjustments */
 .avatar-stack-img {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     border: 2px solid #ffffff;
     margin-right: -10px;
@@ -126,6 +158,7 @@
 /* Project Cards Hover */
 .project-card-item {
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 .project-card-item:hover img {
     transform: scale(1.05);
@@ -199,7 +232,7 @@
     </div>
 </section>
 
-<!-- 2. ABOUT US (RESTORED EXACT APPROVED ALIGNMENT & WRAP) -->
+<!-- 2. ABOUT US -->
 <section class="py-5" style="background-color: #f4f4f4;">
     <div class="container py-3">
         <div class="row align-items-center g-4">
@@ -253,10 +286,7 @@
             <!-- About Images: Balanced Overlay -->
             <div class="col-12 col-lg-5">
                 <div class="position-relative d-flex justify-content-end align-items-center about-img-container" style="min-height: 380px;">
-                    <!-- Main Right Image -->
                     <img src="assets/images/c84739eb2ed88a5d12b5a4eaa2f2b5d9cc173fe8.jpg" alt="Automation Systems" class="img-fluid shadow-sm" style="width: 68%; height: 350px; object-fit: cover; border-radius: 18px;">
-                    
-                    <!-- Overlapping Left Bottom Image -->
                     <img src="assets/images/7e3d191a15ac23b17a1f8a34d1a0cbed7c03be85.jpg" alt="Quality Control" class="img-fluid shadow border border-white border-4 position-absolute" style="width: 48%; height: 200px; object-fit: cover; border-radius: 16px; left: 0; bottom: 12px; z-index: 2;">
                 </div>
             </div>
@@ -265,97 +295,43 @@
     </div>
 </section>
 
-<!-- 3. SPECIAL OFFER -->
+<!-- 3. SPECIAL OFFER (DYNAMIC FROM DATABASE ONLY) -->
 <section class="offer-section py-0 bg-light">
     <div class="container-fluid px-0">
         <div id="offerBannerCarousel" class="carousel slide carousel-fade position-relative" data-bs-ride="carousel" data-bs-interval="3000" style="overflow: hidden;">
             
-            <!-- Top-Right Diagonal "Hurry Up!" Ribbon -->
             <div style="position: absolute; top: 0; right: 0; width: 150px; height: 150px; overflow: hidden; z-index: 20; pointer-events: none;">
                 <span style="position: absolute; display: block; width: 220px; padding: 8px 0; background-color: #b03030; color: #ffffff; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; text-align: center; left: -25px; top: 32px; transform: rotate(45deg); box-shadow: 0 3px 10px rgba(0,0,0,0.25); letter-spacing: 0.5px;">Hurry Up!</span>
             </div>
 
-            <!-- Carousel Slides -->
+            <!-- Carousel Slides strictly from DB -->
             <div class="carousel-inner">
-                
-                <!-- Slide 1 -->
-                <div class="carousel-item active">
-                    <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('assets/images/71455c53cbed251be21bbb31286a64a1ebe232e4 (2).png') center top / cover no-repeat; min-height: 520px; position: relative;">
-                        <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
-                        <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
-                            <h3 class="fw-bold text-dark fs-4 mb-1">Free installation for orders over</h3>
-                            <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;">Rs:5000</h2>
-                            <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
-                                elementum vehicula, Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
-                            </p>
-                            <a href="products.php" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
+                <?php if(!empty($dbOffers)): ?>
+                    <?php foreach($dbOffers as $idx => $off): ?>
+                    <div class="carousel-item <?php echo ($idx === 0) ? 'active' : ''; ?>">
+                        <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('<?php echo htmlspecialchars($off['bg_image']); ?>') center top / cover no-repeat; min-height: 520px; position: relative;">
+                            <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
+                            <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
+                                <h3 class="fw-bold text-dark fs-4 mb-1"><?php echo htmlspecialchars($off['title']); ?></h3>
+                                <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;"><?php echo htmlspecialchars($off['highlight_price']); ?></h2>
+                                <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
+                                    <?php echo htmlspecialchars($off['description']); ?>
+                                </p>
+                                <a href="<?php echo htmlspecialchars($off['btn_link'] ?? 'products.php'); ?>" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="carousel-item">
-                    <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('assets/images/shutterstock_165341882.jpg') center top / cover no-repeat; min-height: 520px; position: relative;">
-                        <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
-                        <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
-                            <h3 class="fw-bold text-dark fs-4 mb-1">Free installation for orders over</h3>
-                            <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;">Rs:5000</h2>
-                            <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
-                                elementum vehicula, Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
-                            </p>
-                            <a href="products.php" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="carousel-item active">
+                        <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: #111; min-height: 300px;">
+                            <p class="text-white mb-0">No active offers available in database.</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="carousel-item">
-                    <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('assets/images/ac-maintenance-grande-prairie.jpg') center top / cover no-repeat; min-height: 520px; position: relative;">
-                        <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
-                        <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
-                            <h3 class="fw-bold text-dark fs-4 mb-1">Free installation for orders over</h3>
-                            <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;">Rs:5000</h2>
-                            <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
-                                elementum vehicula, Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
-                            </p>
-                            <a href="products.php" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 4 -->
-                <div class="carousel-item">
-                    <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('assets/images/images.jpg') center top / cover no-repeat; min-height: 520px; position: relative;">
-                        <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
-                        <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
-                            <h3 class="fw-bold text-dark fs-4 mb-1">Free installation for orders over</h3>
-                            <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;">Rs:5000</h2>
-                            <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
-                                elementum vehicula, Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
-                            </p>
-                            <a href="products.php" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 5 -->
-                <div class="carousel-item">
-                    <div class="carousel-item-inner d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('assets/images/Control-Panel-Integration.jpg') center top / cover no-repeat; min-height: 520px; position: relative;">
-                        <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
-                        <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
-                            <h3 class="fw-bold text-dark fs-4 mb-1">Free installation for orders over</h3>
-                            <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;">Rs:5000</h2>
-                            <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
-                                elementum vehicula, Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
-                            </p>
-                            <a href="products.php" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
-                        </div>
-                    </div>
-                </div>
-
+                <?php endif; ?>
             </div>
 
-            <!-- Left & Right Circular Red Arrow Buttons -->
+            <!-- Left & Right Controls -->
             <button class="carousel-control-prev offer-control-prev-custom" type="button" data-bs-target="#offerBannerCarousel" data-bs-slide="prev" style="position: absolute; top: 50%; transform: translateY(-50%); left: 12%; width: 46px; height: 46px; background-color: #b03030; color: #ffffff; border-radius: 50%; border: none; z-index: 15; opacity: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
                 <i class="fas fa-chevron-left" style="font-size: 1rem; color: #ffffff;"></i>
             </button>
@@ -363,20 +339,18 @@
                 <i class="fas fa-chevron-right" style="font-size: 1.1rem; color: #ffffff;"></i>
             </button>
 
-            <!-- Bottom 5 Dot Indicators -->
+            <!-- Bottom Dot Indicators -->
             <div class="carousel-indicators position-relative d-flex justify-content-center align-items-center gap-2 py-3 bg-light m-0">
-                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="0" class="offer-dot-btn active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="1" class="offer-dot-btn" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="2" class="offer-dot-btn" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="3" class="offer-dot-btn" aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="4" class="offer-dot-btn" aria-label="Slide 5"></button>
+                <?php foreach($dbOffers as $idx => $off): ?>
+                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="<?php echo $idx; ?>" class="offer-dot-btn <?php echo ($idx === 0) ? 'active' : ''; ?>" aria-label="Slide <?php echo $idx + 1; ?>"></button>
+                <?php endforeach; ?>
             </div>
 
         </div>
     </div>
 </section>
 
-<!-- 4. OUR PRODUCTS -->
+<!-- 4. OUR PRODUCTS (DYNAMIC FROM DATABASE ONLY) -->
 <section class="py-5 bg-light">
     <div class="container">
         <!-- Section Header -->
@@ -388,68 +362,64 @@
             <a href="products.php" class="btn text-white px-4 py-2 fw-semibold rounded-3 shadow-sm" style="background-color: #b03030; font-size: 0.88rem;">View All</a>
         </div>
 
-        <!-- Product Grid (8 Cards) -->
+        <!-- Product Grid (Dynamic DB Products) -->
         <div class="row g-4">
-            <?php 
-            $products = [
-                ['title' => 'Digital Panel Meters', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/a12a78c9cade7fe7b8aca146cb4b39e47c28dd5f.png'],
-                ['title' => 'Switching Power Supplies', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/ba017a87ff65aa4424f3158620d5d1b168f9d5f7.png'],
-                ['title' => 'Gear Pumps', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/c01a988540e693f11d5c4fc56b9fbb442ae38559.png'],
-                ['title' => 'Gear Pumps', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/bd47cb0f41091484059c3187fcdd4108809182e4.png'],
-                ['title' => 'Power packages', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/68f25238d73c93408ba9cb5224338e0c49c1260d.png'],
-                ['title' => 'Filter water separator', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/4b0b4ee85c33c0cfaa3799b6ced5b435328ad404.png'],
-                ['title' => 'Rotary Encoder', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/676f11f923eb9a41fb729105586e56777f3d3320.png'],
-                ['title' => 'Pressure Regulator', 'price' => 'Rs 5000', 'old' => 'Rs 6600', 'img' => 'assets/images/b4c48a7f53e0efa294b27e121ea8aaf4b0af7eac.png'],
-            ];
-
-            foreach($products as $p):
-            ?>
-            <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-                <div class="product-card-box">
-                    <!-- Top Image Area -->
-                    <div class="position-relative bg-white text-center p-3" style="height: 180px; display: flex; align-items: center; justify-content: center;">
-                        <img src="<?php echo $p['img']; ?>" class="img-fluid" style="max-height: 135px; width: auto; object-fit: contain;" alt="<?php echo $p['title']; ?>">
-                        
-                        <!-- Heart & Eye Action Icons (Top Right) -->
-                        <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2" style="z-index: 5;">
-                            <button type="button" class="product-action-btn shadow-sm" title="Wishlist">
-                                <i class="far fa-heart"></i>
-                            </button>
-                            <button type="button" class="product-action-btn shadow-sm" title="Quick View">
-                                <i class="far fa-eye"></i>
-                            </button>
+            <?php if(!empty($dbProducts)): ?>
+                <?php foreach($dbProducts as $p): ?>
+                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="product-card-box" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $p['id']; ?>')">
+                        <!-- Top Image Area -->
+                        <div class="position-relative bg-white text-center p-3" style="height: 180px; display: flex; align-items: center; justify-content: center;">
+                            <img src="<?php echo htmlspecialchars($p['main_img']); ?>" class="img-fluid" style="max-height: 135px; width: auto; object-fit: contain;" alt="<?php echo htmlspecialchars($p['title']); ?>">
+                            
+                            <!-- Heart & Eye Action Icons (Top Right) -->
+                            <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-2" style="z-index: 5;">
+                                <button type="button" class="product-action-btn shadow-sm btn-wishlist-index" data-sku="<?php echo htmlspecialchars($p['sku']); ?>" onclick="toggleWishlistIndex(event, '<?php echo htmlspecialchars($p['title']); ?>', '<?php echo htmlspecialchars($p['sku']); ?>', 'Rs <?php echo number_format($p['price'], 0); ?>', '<?php echo htmlspecialchars($p['main_img']); ?>')" title="Save to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <a href="product-detail.php?id=<?php echo $p['id']; ?>" class="product-action-btn shadow-sm text-decoration-none" onclick="event.stopPropagation()" title="Quick View">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Bottom Details Area -->
-                    <div class="p-3 text-start" style="background-color: #ececec; border-top: 1px solid #ddd;">
-                        <h6 class="fw-bold text-dark mb-1" style="font-size: 0.85rem; height: 38px; display: flex; align-items: center;"><?php echo $p['title']; ?></h6>
-                        <div class="mb-1" style="font-size: 0.85rem;">
-                            <span class="fw-bold" style="color: #e54d42;"><?php echo $p['price']; ?></span>
-                            <span class="text-muted text-decoration-line-through ms-2" style="font-size: 0.78rem; color: #888888 !important;"><?php echo $p['old']; ?></span>
-                        </div>
-                        <div class="d-flex align-items-center" style="font-size: 0.75rem;">
-                            <span class="text-warning me-1">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </span>
-                            <span class="text-secondary fw-medium">(65)</span>
+                        <!-- Bottom Details Area -->
+                        <div class="p-3 text-start" style="background-color: #ececec; border-top: 1px solid #ddd;">
+                            <h6 class="fw-bold mb-1" style="font-size: 0.85rem; height: 38px; display: flex; align-items: center; color: #333;">
+                                <?php echo htmlspecialchars($p['title']); ?>
+                            </h6>
+                            <div class="mb-1" style="font-size: 0.85rem;">
+                                <span class="fw-bold" style="color: #e54d42;">Rs <?php echo number_format($p['price'], 0); ?></span>
+                                <?php if(!empty($p['old_price'])): ?>
+                                <span class="text-muted text-decoration-line-through ms-2" style="font-size: 0.78rem; color: #888888 !important;">Rs <?php echo number_format($p['old_price'], 0); ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="d-flex align-items-center" style="font-size: 0.75rem;">
+                                <span class="text-warning me-1">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </span>
+                                <span class="text-secondary fw-medium">(<?php echo $p['review_count'] ?? '65'; ?>)</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-center py-4">
+                    <p class="text-muted">No products found in database.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-<!-- 5. TESTIMONIALS -->
+<!-- 5. TESTIMONIALS (BULLETPROOF DISTINCT HUMAN FACE AVATARS) -->
 <section class="testimonials-section py-5 text-white position-relative" style="background: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/b95b4009ce4b6e877bde5514673695345345fdcc.png') center/cover no-repeat;">
     <div class="container py-3">
         <div class="row align-items-center g-4">
             
-            <!-- Left Side: Google Info & Avatar Stack -->
+            <!-- Left Side: Google Info & 5 Distinct Face Avatars Stack -->
             <div class="col-12 col-lg-4 text-center text-lg-start ps-lg-4">
-                <!-- Enlarged Google Text in Official Style (Removed 'Testimonials' text) -->
                 <div class="mb-3">
                     <span style="font-family: 'Product Sans', 'Poppins', sans-serif; font-size: 3.2rem; font-weight: 600; letter-spacing: -1.5px; line-height: 1;">
                         <span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span>
@@ -457,88 +427,67 @@
                 </div>
                 <h2 class="fw-bold mb-2 fs-2 text-white" style="line-height: 1.25;">Excellent</h2>
                 
-                <!-- 4.5 Stars -->
                 <div class="text-warning fs-5 mb-2">
                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                 </div>
                 <p class="text-white fs-6 mb-3 font-semibold">120+ Reviews</p>
 
-                <!-- Overlapping Avatars Stack -->
+                <!-- 5 Distinct Bulletproof Face Avatars Stack -->
                 <div class="d-flex align-items-center justify-content-center justify-content-lg-start pt-1">
-                    <img src="assets/images/a12a78c9cade7fe7b8aca146cb4b39e47c28dd5f.png" class="avatar-stack-img" alt="user1">
-                    <img src="assets/images/71455c53cbed251be21bbb31286a64a1ebe232e4.png" class="avatar-stack-img" alt="user2">
-                    <img src="assets/images/392744f084c3a79733ea661cd02d6fe277cf9f4a.png" class="avatar-stack-img" alt="user3">
-                    <img src="assets/images/68f25238d73c93408ba9cb5224338e0c49c1260d.png" class="avatar-stack-img" alt="user4">
-                    <img src="assets/images/b97bd4048a2dd2dd3ee7c2ea479d2d1ff89544a0.png" class="avatar-stack-img" alt="user5">
-                    <img src="assets/images/676f11f923eb9a41fb729105586e56777f3d3320.png" class="avatar-stack-img" alt="user6">
-                    <img src="assets/images/b4c48a7f53e0efa294b27e121ea8aaf4b0af7eac.png" class="avatar-stack-img" alt="user7">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="avatar-stack-img" alt="user1">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="avatar-stack-img" alt="user2">
+                    <img src="https://randomuser.me/api/portraits/men/85.jpg" class="avatar-stack-img" alt="user3">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="avatar-stack-img" alt="user4">
+                    <img src="https://randomuser.me/api/portraits/men/46.jpg" class="avatar-stack-img" alt="user5">
                 </div>
             </div>
 
-            <!-- Right Side: Testimonial Cards & Arrow -->
+            <!-- Right Side: Dynamic Testimonial Cards with 100% Unique Human Faces -->
             <div class="col-12 col-lg-8 position-relative pe-lg-5">
-                <div class="row g-3 g-md-4">
-                    
-                    <!-- Card 1 -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-4" style="background: rgba(215, 215, 215, 0.8); backdrop-filter: blur(6px); border-radius: 18px; color: #111;">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="assets/images/5872a08cd669c3cadda08e29a9ba3eff4d6a5c52.png" alt="Arun Perera" class="rounded-circle me-3 shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+                <div class="row g-3 g-md-4 align-items-stretch">
+                    <?php if(!empty($dbReviews)): ?>
+                        <?php foreach($dbReviews as $idx => $rev): 
+                            // Select unique face avatar from array based on card index
+                            $avatarUrl = $faceAvatars[$idx % count($faceAvatars)];
+                        ?>
+                        <div class="col-12 col-md-6 d-flex">
+                            <div class="p-4 w-100 d-flex flex-column justify-content-between h-100 shadow-sm" style="background: rgba(215, 215, 215, 0.85); backdrop-filter: blur(6px); border-radius: 18px; color: #111;">
                                 <div>
-                                    <h5 class="fw-bold mb-1" style="color: #b03030; font-size: 1.15rem;">Arun Perera</h5>
-                                    <span class="text-secondary small fw-medium" style="font-size: 0.8rem;">ABCD Company</span>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="<?php echo $avatarUrl; ?>" alt="<?php echo htmlspecialchars($rev['reviewer_name']); ?>" class="rounded-circle me-3 shadow-sm border border-2 border-white" style="width: 60px; height: 60px; object-fit: cover;">
+                                        <div>
+                                            <h5 class="fw-bold mb-1" style="color: #b03030; font-size: 1.1rem;"><?php echo htmlspecialchars($rev['reviewer_name']); ?></h5>
+                                            <span class="text-secondary small fw-medium" style="font-size: 0.8rem;">Verified Buyer</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-dark mb-3" style="font-size: 0.83rem; line-height: 1.6; text-align: left;">
+                                        <?php echo htmlspecialchars($rev['comment']); ?>
+                                    </p>
                                 </div>
-                            </div>
-                            <p class="text-dark mb-3" style="font-size: 0.82rem; line-height: 1.55; text-align: justify; text-justify: inter-word;">
-                                ISARO Automation Systems transformed our production line with their expert automation solutions. Their team was professional, responsive, and delivered a high-quality setup that exceeded our expectations.
-                            </p>
-                            <div>
-                                <div class="text-warning x-small mb-1" style="font-size: 0.85rem;">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star text-white"></i>
+                                <div>
+                                    <div class="text-warning x-small mb-1" style="font-size: 0.85rem;">
+                                        <?php for($s=1;$s<=5;$s++) echo ($s<=$rev['rating']) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star text-muted"></i>'; ?>
+                                    </div>
+                                    <span class="text-dark fw-normal" style="font-size: 0.75rem;"><?php echo $rev['rating']; ?>-star review</span>
                                 </div>
-                                <span class="text-dark fw-normal" style="font-size: 0.75rem;">4-star review</span>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-4" style="background: rgba(215, 215, 215, 0.8); backdrop-filter: blur(6px); border-radius: 18px; color: #111;">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="assets/images/b10b887974d8e0008333dcd07eaebd4ca713ff26.png" alt="Kasun Silva" class="rounded-circle me-3 shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
-                                <div>
-                                    <h5 class="fw-bold mb-1" style="color: #b03030; font-size: 1.15rem;">Kasun Silva</h5>
-                                    <span class="text-secondary small fw-medium" style="font-size: 0.8rem;">XYZ Company</span>
-                                </div>
-                            </div>
-                            <p class="text-dark mb-3" style="font-size: 0.82rem; line-height: 1.55; text-align: justify; text-justify: inter-word;">
-                                ISARO Automation Systems transformed our production line with their expert automation solutions. Their team was professional, responsive, and delivered a high-quality setup that exceeded our expectations.
-                            </p>
-                            <div>
-                                <div class="text-warning x-small mb-1" style="font-size: 0.85rem;">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star text-white"></i>
-                                </div>
-                                <span class="text-dark fw-normal" style="font-size: 0.75rem;">4-star review</span>
-                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12 text-center py-4 text-white">
+                            <p class="mb-0">No approved reviews found in database.</p>
                         </div>
-                    </div>
-
+                    <?php endif; ?>
                 </div>
-
-                <!-- Right Circular Chevron Arrow Button -->
-                <button type="button" class="btn btn-light rounded-circle shadow-sm position-absolute top-50 end-0 translate-middle-y d-none d-md-flex align-items-center justify-content-center" style="width: 44px; height: 44px; z-index: 10; border: none; margin-right: -15px;" aria-label="Next Testimonial">
-                    <i class="fas fa-chevron-right text-dark" style="font-size: 1.1rem;"></i>
-                </button>
             </div>
 
         </div>
     </div>
 </section>
 
-<!-- 6. PROJECTS -->
+<!-- 6. PROJECTS (DYNAMIC FROM DATABASE ONLY) -->
 <section class="py-5" style="background-color: #f2f2f2;">
     <div class="container py-2">
-        <!-- Section Header Matching Image Style -->
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <span class="text-secondary small fw-medium d-block mb-2" style="font-size: 0.88rem; color: #555555 !important;">Our Projects</span>
@@ -547,28 +496,26 @@
             <a href="projects.php" class="btn text-white px-4 py-2 fw-semibold rounded-3 shadow-sm" style="background-color: #b03030; font-size: 0.88rem;">View All</a>
         </div>
 
-        <!-- 4 Projects Cards Grid -->
         <div class="row g-4">
-            <?php
-            $projects = [
-                ['img' => 'assets/images/e0ba8d58efa004b1ac9afae79bf8c83837b8b6b9.png', 'title' => 'Smart Factory PLC Integration'],
-                ['img' => 'assets/images/abfe2a759945e5458aa42bb255a9f6a4c17ab686.png', 'title' => 'Smart Factory PLC Integration'],
-                ['img' => 'assets/images/2f9058cda797988dc0788f626d5eb70c856ef2bb.png', 'title' => 'Smart Factory PLC Integration'],
-                ['img' => 'assets/images/392744f084c3a79733ea661cd02d6fe277cf9f4a.png', 'title' => 'Smart Factory PLC Integration'],
-            ];
-            foreach($projects as $project): ?>
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="text-center project-card-item">
-                    <div class="mb-3 overflow-hidden rounded-2 shadow-sm">
-                        <img src="<?php echo $project['img']; ?>" alt="<?php echo $project['title']; ?>" class="img-fluid w-100" style="height: 190px; object-fit: cover;">
+            <?php if(!empty($dbProjects)): ?>
+                <?php foreach($dbProjects as $proj): ?>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="text-center project-card-item" onclick="window.location.href='project-detail.php?id=<?php echo $proj['id']; ?>'">
+                        <div class="mb-3 overflow-hidden rounded-2 shadow-sm">
+                            <img src="<?php echo htmlspecialchars($proj['main_img']); ?>" alt="<?php echo htmlspecialchars($proj['title']); ?>" class="img-fluid w-100" style="height: 190px; object-fit: cover;">
+                        </div>
+                        <h6 class="fw-bold mb-2 fs-6" style="color: #b03030; font-size: 0.95rem;"><?php echo htmlspecialchars($proj['title']); ?></h6>
+                        <p class="text-secondary mx-auto mb-0" style="font-size: 0.76rem; line-height: 1.48; max-width: 95%; text-align: center;">
+                            <?php echo htmlspecialchars($proj['short_desc']); ?>
+                        </p>
                     </div>
-                    <h6 class="fw-bold mb-2 fs-6" style="color: #b03030; font-size: 0.95rem;"><?php echo $project['title']; ?></h6>
-                    <p class="text-secondary mx-auto mb-0" style="font-size: 0.76rem; line-height: 1.48; max-width: 95%; text-align: center;">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at lectus sit amet ipsum vestibulum rutrum vel nec risus. Nullam sed fermentum elit.
-                    </p>
                 </div>
-            </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-center py-4">
+                    <p class="text-muted">No completed projects found in database.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -580,8 +527,40 @@
 
 </div>
 
-<!-- JavaScript to Ensure Guaranteed Auto-play Every 3 Seconds (3000ms) -->
 <script>
+function navigateToDetail(event, url) {
+    if (event.target.closest('button') || event.target.closest('a')) {
+        return;
+    }
+    window.location.href = url;
+}
+
+function toggleWishlistIndex(event, title, sku, price, img) {
+    event.stopPropagation();
+    var btn = event.currentTarget;
+    var stored = localStorage.getItem('isaro_wishlist');
+    var list = stored ? JSON.parse(stored) : [];
+
+    var index = list.findIndex(function(item) { return item.sku === sku; });
+
+    if (index > -1) {
+        list.splice(index, 1);
+        btn.classList.remove('active');
+        btn.querySelector('i').className = 'far fa-heart';
+    } else {
+        list.push({ title: title, sku: sku, price: price, img: img });
+        btn.classList.add('active');
+        btn.querySelector('i').className = 'fas fa-heart text-white';
+    }
+
+    localStorage.setItem('isaro_wishlist', JSON.stringify(list));
+    
+    var badge = document.getElementById('headerWishlistCount');
+    if (badge) {
+        badge.innerText = list.length;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var offerCarouselEl = document.querySelector('#offerBannerCarousel');
     if (offerCarouselEl && typeof bootstrap !== 'undefined') {
@@ -592,6 +571,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         offerCarousel.cycle();
     }
+
+    var stored = localStorage.getItem('isaro_wishlist');
+    var list = stored ? JSON.parse(stored) : [];
+
+    document.querySelectorAll('.btn-wishlist-index').forEach(function(btn) {
+        var sku = btn.getAttribute('data-sku');
+        var exists = list.some(function(item) { return item.sku === sku; });
+        if (exists) {
+            btn.classList.add('active');
+            btn.querySelector('i').className = 'fas fa-heart text-white';
+        }
+    });
 });
 </script>
 
