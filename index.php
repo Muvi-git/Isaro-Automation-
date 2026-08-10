@@ -10,12 +10,12 @@ $dbOffers = $offersStmt->fetchAll();
 $productsStmt = $pdo->query("SELECT * FROM products ORDER BY is_featured DESC, id DESC LIMIT 8");
 $dbProducts = $productsStmt->fetchAll();
 
-// 3. Fetch Approved Reviews strictly from Database (Limit 2)
-$reviewsStmt = $pdo->query("SELECT * FROM product_reviews WHERE is_approved=1 ORDER BY id DESC LIMIT 2");
+// 3. Fetch Approved Reviews strictly from Database
+$reviewsStmt = $pdo->query("SELECT * FROM product_reviews WHERE is_approved=1 ORDER BY id DESC");
 $dbReviews = $reviewsStmt->fetchAll();
 
-// 4. Fetch Projects strictly from Database (Limit 4)
-$projectsStmt = $pdo->query("SELECT * FROM projects ORDER BY is_recent DESC, id DESC LIMIT 4");
+// 4. Fetch All Projects strictly from Database for Slider
+$projectsStmt = $pdo->query("SELECT * FROM projects ORDER BY is_recent DESC, id DESC");
 $dbProjects = $projectsStmt->fetchAll();
 
 // Curated Distinct High-Quality Real Human Face Avatars Array
@@ -29,6 +29,9 @@ $faceAvatars = [
 ];
 ?>
 
+<!-- Swiper Slider CSS for Testimonials, Offers & Projects -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <!-- Comprehensive Responsive & Premium Design CSS -->
 <style>
 /* Global Smooth Enhancements & Flicker Prevention */
@@ -36,12 +39,88 @@ $faceAvatars = [
     font-family: 'Poppins', sans-serif;
 }
 
-/* Hero Section Height Lock to Prevent FOUC / Layout Shift Flicker */
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+/* Hero Section Layered Automatic Background Slider */
 .isaro-hero-section {
     min-height: 480px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+.hero-bg-slide.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ENHANCED ANIMATED OUR PARTNERS SECTION */
+.hero-partners-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 14px;
+    display: inline-block;
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+}
+
+.partner-badge {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 18px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.22);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    opacity: 0;
+    animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+}
+
+.partner-badge:hover {
+    transform: translateY(-5px) scale(1.06);
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(176, 48, 48, 0.4);
+    border-color: #b03030;
+}
+
+.partner-badge img {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* WhatsApp Icon Size & Hover Animation Enhancement */
@@ -86,24 +165,6 @@ $faceAvatars = [
     box-shadow: 0 8px 18px rgba(176, 48, 48, 0.38);
 }
 
-/* Special Offer Carousel Adjustments */
-.offer-dot-btn {
-    width: 10px !important;
-    height: 10px !important;
-    border-radius: 50% !important;
-    background-color: transparent !important;
-    border: 2px solid #c82333 !important;
-    margin: 0 !important;
-    opacity: 0.5 !important;
-    transition: all 0.3s ease !important;
-    padding: 0 !important;
-}
-.offer-dot-btn.active {
-    background-color: #c82333 !important;
-    opacity: 1 !important;
-    transform: scale(1.3);
-}
-
 /* Product Cards Hover & Typography */
 .product-card-box {
     border: 1px solid #e2e2e2;
@@ -140,7 +201,32 @@ $faceAvatars = [
     border-color: #c82333;
 }
 
-/* Testimonial Section Adjustments */
+/* TESTIMONIALS BACKGROUND AUTOMATIC SLIDER STYLES */
+.testimonials-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-bg-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+.testimonial-bg-slide.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .avatar-stack-img {
     width: 38px;
     height: 38px;
@@ -182,13 +268,6 @@ $faceAvatars = [
     .offer-card-box { padding: 1.5rem 1.25rem !important; }
     .offer-card-box h3 { font-size: 1.1rem !important; }
     .offer-card-box h2 { font-size: 1.35rem !important; }
-    .offer-control-prev-custom,
-    .offer-control-next-custom {
-        width: 38px !important;
-        height: 38px !important;
-    }
-    .offer-control-prev-custom { left: 8px !important; }
-    .offer-control-next-custom { right: 8px !important; }
     .about-badge-circle { width: 55px !important; height: 55px !important; }
     .offer-banner-bg { min-height: 380px !important; }
     .whatsapp-float { width: 52px !important; height: 52px !important; font-size: 28px !important; }
@@ -198,9 +277,14 @@ $faceAvatars = [
 
 <div class="isaro-main-wrapper">
 
-<!-- 1. HERO BANNER -->
+<!-- 1. HERO BANNER WITH AUTOMATIC BACKGROUND SLIDESHOW -->
 <section class="isaro-hero-section text-white py-5">
-    <div class="container text-center py-4">
+    <!-- 3 Layered Background Images for Automatic Crossfade -->
+    <div class="hero-bg-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg');"></div>
+    <div class="hero-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/c84739eb2ed88a5d12b5a4eaa2f2b5d9cc173fe8.jpg');"></div>
+    <div class="hero-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/7e3d191a15ac23b17a1f8a34d1a0cbed7c03be85.jpg');"></div>
+
+    <div class="container text-center py-4 position-relative" style="z-index: 5;">
         <h1 class="hero-title fw-bold mb-3" style="font-size: 2.8rem; line-height: 1.25; letter-spacing: -0.3px;">
             Reliable Electrical, Hydraulic &<br>
             Pneumatic<br>
@@ -211,9 +295,11 @@ $faceAvatars = [
         </p>
         <a href="products.php" class="btn btn-danger btn-lg px-4 py-2 fs-6 mb-5 shadow-sm rounded-2 fw-semibold" style="background-color: #b03030; border: none;">Explore More</a>
 
-        <!-- Partners -->
+        <!-- Premium Animated Partners Section -->
         <div class="pt-2">
-            <p class="small text-white mb-3" style="text-decoration: underline; font-size: 0.85rem;">Our Partners</p>
+            <div>
+                <span class="hero-partners-title">Our Partners</span>
+            </div>
             <div class="d-flex justify-content-center align-items-center gap-3 gap-md-4 flex-wrap">
                 <span class="partner-badge" title="Partner 1">
                     <img src="assets/images/b97bd4048a2dd2dd3ee7c2ea479d2d1ff89544a0.png" alt="Partner 1">
@@ -331,20 +417,13 @@ $faceAvatars = [
                 <?php endif; ?>
             </div>
 
-            <!-- Left & Right Controls -->
+            <!-- Left & Right Control Arrows -->
             <button class="carousel-control-prev offer-control-prev-custom" type="button" data-bs-target="#offerBannerCarousel" data-bs-slide="prev" style="position: absolute; top: 50%; transform: translateY(-50%); left: 12%; width: 46px; height: 46px; background-color: #b03030; color: #ffffff; border-radius: 50%; border: none; z-index: 15; opacity: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
                 <i class="fas fa-chevron-left" style="font-size: 1rem; color: #ffffff;"></i>
             </button>
             <button class="carousel-control-next offer-control-next-custom" type="button" data-bs-target="#offerBannerCarousel" data-bs-slide="next" style="position: absolute; top: 50%; transform: translateY(-50%); right: 12%; width: 46px; height: 46px; background-color: #b03030; color: #ffffff; border-radius: 50%; border: none; z-index: 15; opacity: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(176,48,48,0.35);">
                 <i class="fas fa-chevron-right" style="font-size: 1.1rem; color: #ffffff;"></i>
             </button>
-
-            <!-- Bottom Dot Indicators -->
-            <div class="carousel-indicators position-relative d-flex justify-content-center align-items-center gap-2 py-3 bg-light m-0">
-                <?php foreach($dbOffers as $idx => $off): ?>
-                <button type="button" data-bs-target="#offerBannerCarousel" data-bs-slide-to="<?php echo $idx; ?>" class="offer-dot-btn <?php echo ($idx === 0) ? 'active' : ''; ?>" aria-label="Slide <?php echo $idx + 1; ?>"></button>
-                <?php endforeach; ?>
-            </div>
 
         </div>
     </div>
@@ -413,9 +492,14 @@ $faceAvatars = [
     </div>
 </section>
 
-<!-- 5. TESTIMONIALS (BULLETPROOF DISTINCT HUMAN FACE AVATARS) -->
-<section class="testimonials-section py-5 text-white position-relative" style="background: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/b95b4009ce4b6e877bde5514673695345345fdcc.png') center/cover no-repeat;">
-    <div class="container py-3">
+<!-- 5. TESTIMONIALS (AUTO SLIDESHOW BACKGROUND & EXACT 2 REVIEWS VISIBLE SWIPER SLIDER) -->
+<section class="testimonials-section py-5 text-white position-relative">
+    <!-- 3 Layered Background Images for Automatic Crossfade -->
+    <div class="testimonial-bg-slide active" style="background-image: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/b95b4009ce4b6e877bde5514673695345345fdcc.png');"></div>
+    <div class="testimonial-bg-slide" style="background-image: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg');"></div>
+    <div class="testimonial-bg-slide" style="background-image: linear-gradient(rgba(18, 20, 24, 0.88), rgba(18, 20, 24, 0.88)), url('assets/images/67d12759ce882ac6dba72d274c24e0c3e3f0bc10.png');"></div>
+
+    <div class="container py-3 position-relative" style="z-index: 5;">
         <div class="row align-items-center g-4">
             
             <!-- Left Side: Google Info & 5 Distinct Face Avatars Stack -->
@@ -442,42 +526,43 @@ $faceAvatars = [
                 </div>
             </div>
 
-            <!-- Right Side: Dynamic Testimonial Cards with 100% Unique Human Faces -->
+            <!-- Right Side: Dynamic Testimonial Cards (Strictly 2 visible at a time, auto sliding all DB reviews) -->
             <div class="col-12 col-lg-8 position-relative pe-lg-5">
-                <div class="row g-3 g-md-4 align-items-stretch">
-                    <?php if(!empty($dbReviews)): ?>
-                        <?php foreach($dbReviews as $idx => $rev): 
-                            // Select unique face avatar from array based on card index
-                            $avatarUrl = $faceAvatars[$idx % count($faceAvatars)];
-                        ?>
-                        <div class="col-12 col-md-6 d-flex">
-                            <div class="p-4 w-100 d-flex flex-column justify-content-between h-100 shadow-sm" style="background: rgba(215, 215, 215, 0.85); backdrop-filter: blur(6px); border-radius: 18px; color: #111;">
-                                <div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <img src="<?php echo $avatarUrl; ?>" alt="<?php echo htmlspecialchars($rev['reviewer_name']); ?>" class="rounded-circle me-3 shadow-sm border border-2 border-white" style="width: 60px; height: 60px; object-fit: cover;">
-                                        <div>
-                                            <h5 class="fw-bold mb-1" style="color: #b03030; font-size: 1.1rem;"><?php echo htmlspecialchars($rev['reviewer_name']); ?></h5>
-                                            <span class="text-secondary small fw-medium" style="font-size: 0.8rem;">Verified Buyer</span>
+                <div class="swiper testimonial-swiper">
+                    <div class="swiper-wrapper">
+                        <?php if(!empty($dbReviews)): ?>
+                            <?php foreach($dbReviews as $idx => $rev): 
+                                $avatarUrl = $faceAvatars[$idx % count($faceAvatars)];
+                            ?>
+                            <div class="swiper-slide h-auto d-flex py-2">
+                                <div class="p-4 w-100 d-flex flex-column justify-content-between h-100 shadow-sm" style="background: rgba(215, 215, 215, 0.85); backdrop-filter: blur(6px); border-radius: 18px; color: #111;">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <img src="<?php echo $avatarUrl; ?>" alt="<?php echo htmlspecialchars($rev['reviewer_name']); ?>" class="rounded-circle me-3 shadow-sm border border-2 border-white" style="width: 60px; height: 60px; object-fit: cover;">
+                                            <div>
+                                                <h5 class="fw-bold mb-1" style="color: #b03030; font-size: 1.1rem;"><?php echo htmlspecialchars($rev['reviewer_name']); ?></h5>
+                                                <span class="text-secondary small fw-medium" style="font-size: 0.8rem;">Verified Buyer</span>
+                                            </div>
                                         </div>
+                                        <p class="text-dark mb-3" style="font-size: 0.83rem; line-height: 1.6; text-align: left;">
+                                            <?php echo htmlspecialchars($rev['comment']); ?>
+                                        </p>
                                     </div>
-                                    <p class="text-dark mb-3" style="font-size: 0.83rem; line-height: 1.6; text-align: left;">
-                                        <?php echo htmlspecialchars($rev['comment']); ?>
-                                    </p>
-                                </div>
-                                <div>
-                                    <div class="text-warning x-small mb-1" style="font-size: 0.85rem;">
-                                        <?php for($s=1;$s<=5;$s++) echo ($s<=$rev['rating']) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star text-muted"></i>'; ?>
+                                    <div>
+                                        <div class="text-warning x-small mb-1" style="font-size: 0.85rem;">
+                                            <?php for($s=1;$s<=5;$s++) echo ($s<=$rev['rating']) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star text-muted"></i>'; ?>
+                                        </div>
+                                        <span class="text-dark fw-normal" style="font-size: 0.75rem;"><?php echo $rev['rating']; ?>-star review</span>
                                     </div>
-                                    <span class="text-dark fw-normal" style="font-size: 0.75rem;"><?php echo $rev['rating']; ?>-star review</span>
                                 </div>
                             </div>
-                        </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="col-12 text-center py-4 text-white">
-                            <p class="mb-0">No approved reviews found in database.</p>
-                        </div>
-                    <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="swiper-slide text-center py-4 text-white">
+                                <p class="mb-0">No approved reviews found in database.</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
 
@@ -485,7 +570,7 @@ $faceAvatars = [
     </div>
 </section>
 
-<!-- 6. PROJECTS (DYNAMIC FROM DATABASE ONLY) -->
+<!-- 6. PROJECTS (STRICTLY 4 VISIBLE CARDS PER SLIDE WITH AUTO SLIDING FOR ALL DB PROJECTS) -->
 <section class="py-5" style="background-color: #f2f2f2;">
     <div class="container py-2">
         <div class="d-flex justify-content-between align-items-end mb-4">
@@ -496,26 +581,28 @@ $faceAvatars = [
             <a href="projects.php" class="btn text-white px-4 py-2 fw-semibold rounded-3 shadow-sm" style="background-color: #b03030; font-size: 0.88rem;">View All</a>
         </div>
 
-        <div class="row g-4">
-            <?php if(!empty($dbProjects)): ?>
-                <?php foreach($dbProjects as $proj): ?>
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="text-center project-card-item" onclick="window.location.href='project-detail.php?id=<?php echo $proj['id']; ?>'">
-                        <div class="mb-3 overflow-hidden rounded-2 shadow-sm">
-                            <img src="<?php echo htmlspecialchars($proj['main_img']); ?>" alt="<?php echo htmlspecialchars($proj['title']); ?>" class="img-fluid w-100" style="height: 190px; object-fit: cover;">
+        <div class="swiper project-swiper">
+            <div class="swiper-wrapper">
+                <?php if(!empty($dbProjects)): ?>
+                    <?php foreach($dbProjects as $proj): ?>
+                    <div class="swiper-slide h-auto py-2">
+                        <div class="text-center project-card-item h-100" onclick="window.location.href='project-detail.php?id=<?php echo $proj['id']; ?>'">
+                            <div class="mb-3 overflow-hidden rounded-2 shadow-sm">
+                                <img src="<?php echo htmlspecialchars($proj['main_img']); ?>" alt="<?php echo htmlspecialchars($proj['title']); ?>" class="img-fluid w-100" style="height: 190px; object-fit: cover;">
+                            </div>
+                            <h6 class="fw-bold mb-2 fs-6" style="color: #b03030; font-size: 0.95rem;"><?php echo htmlspecialchars($proj['title']); ?></h6>
+                            <p class="text-secondary mx-auto mb-0" style="font-size: 0.76rem; line-height: 1.48; max-width: 95%; text-align: center;">
+                                <?php echo htmlspecialchars($proj['short_desc']); ?>
+                            </p>
                         </div>
-                        <h6 class="fw-bold mb-2 fs-6" style="color: #b03030; font-size: 0.95rem;"><?php echo htmlspecialchars($proj['title']); ?></h6>
-                        <p class="text-secondary mx-auto mb-0" style="font-size: 0.76rem; line-height: 1.48; max-width: 95%; text-align: center;">
-                            <?php echo htmlspecialchars($proj['short_desc']); ?>
-                        </p>
                     </div>
-                </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="col-12 text-center py-4">
-                    <p class="text-muted">No completed projects found in database.</p>
-                </div>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="swiper-slide text-center py-4">
+                        <p class="text-muted mb-0">No completed projects found in database.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </section>
@@ -526,6 +613,9 @@ $faceAvatars = [
 </a>
 
 </div>
+
+<!-- Swiper Slider JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
 function navigateToDetail(event, url) {
@@ -562,6 +652,70 @@ function toggleWishlistIndex(event, title, sku, price, img) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // 1. Automatic Background Image Slideshow Logic for Hero Section
+    const heroSlides = document.querySelectorAll('.hero-bg-slide');
+    if (heroSlides.length > 0) {
+        let currentSlide = 0;
+        setInterval(function() {
+            heroSlides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % heroSlides.length;
+            heroSlides[currentSlide].classList.add('active');
+        }, 4000);
+    }
+
+    // 2. Automatic Background Image Slideshow Logic for Testimonials Section
+    const testimonialSlides = document.querySelectorAll('.testimonial-bg-slide');
+    if (testimonialSlides.length > 0) {
+        let currentTestimonialSlide = 0;
+        setInterval(function() {
+            testimonialSlides[currentTestimonialSlide].classList.remove('active');
+            currentTestimonialSlide = (currentTestimonialSlide + 1) % testimonialSlides.length;
+            testimonialSlides[currentTestimonialSlide].classList.add('active');
+        }, 4000);
+    }
+
+    // 3. Testimonial Cards Swiper
+    if (typeof Swiper !== 'undefined' && document.querySelector('.testimonial-swiper')) {
+        new Swiper('.testimonial-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 24,
+                }
+            }
+        });
+    }
+
+    // 4. Our Projects Swiper
+    if (typeof Swiper !== 'undefined' && document.querySelector('.project-swiper')) {
+        new Swiper('.project-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                576: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                992: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                }
+            }
+        });
+    }
+
     var offerCarouselEl = document.querySelector('#offerBannerCarousel');
     if (offerCarouselEl && typeof bootstrap !== 'undefined') {
         var offerCarousel = new bootstrap.Carousel(offerCarouselEl, {
@@ -582,6 +736,36 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.classList.add('active');
             btn.querySelector('i').className = 'fas fa-heart text-white';
         }
+    });
+
+    // 5. LANDING SCROLL REVEAL OBSERVER FOR INDEX PAGE
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const indexAnimElements = document.querySelectorAll(
+        ".about-badge-circle, .product-card-box, .project-card-item, .offer-card-box, .about-img-container img, .testimonials-section .swiper-slide > div"
+    );
+
+    indexAnimElements.forEach(function(el) {
+        el.classList.add("apple-reveal");
+        let delay = 0;
+        if (el.closest('.row')) {
+            let col = el.closest('[class*="col-"]');
+            if (col && col.parentElement) {
+                let siblings = Array.from(col.parentElement.children);
+                let idx = siblings.indexOf(col);
+                delay = (idx % 4) * 0.12;
+            }
+        }
+        el.style.transitionDelay = delay + 's';
+        revealObserver.observe(el);
     });
 });
 </script>

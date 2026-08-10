@@ -39,6 +39,20 @@ try {
     background-color: #f4f4f4;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* 1. Hero Section */
 .projects-hero-section {
     position: relative;
@@ -334,10 +348,10 @@ try {
 
 </div>
 
-<!-- Custom Sequential Scroll Reveal for Projects Page -->
+<!-- Custom Exact Sequence Scroll Reveal for Projects Page -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const observerOptions = { root: null, rootMargin: "0px 0px -40px 0px", threshold: 0.05 };
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
     const revealObserver = new IntersectionObserver(function(entries, observer) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
@@ -347,14 +361,23 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }, observerOptions);
 
-    // 1. Recent Projects Section Custom Stagger
-    document.querySelectorAll('.recent-card').forEach((card, index) => {
+    // 1. Recent Projects Section - Explicit Order: Large Box First (0.05s), then Small 1 (0.25s), then Small 2 (0.43s)
+    const largeCard = document.querySelector('.recent-card-large');
+    const smallCards = document.querySelectorAll('.recent-card-small');
+
+    if (largeCard) {
+        largeCard.classList.add('apple-reveal');
+        largeCard.style.transitionDelay = '0.05s';
+        revealObserver.observe(largeCard);
+    }
+
+    smallCards.forEach((card, idx) => {
         card.classList.add('apple-reveal');
-        card.style.transitionDelay = (index * 0.15) + 's';
+        card.style.transitionDelay = (0.25 + (idx * 0.18)) + 's';
         revealObserver.observe(card);
     });
 
-    // 2. All Projects Grid Section Custom Stagger (L to R)
+    // 2. All Projects Grid Section Custom Stagger (Strictly Left to Right)
     document.querySelectorAll('.all-projects-section .row').forEach(row => {
         Array.from(row.children).forEach((col, index) => {
             const card = col.querySelector('.project-grid-card');

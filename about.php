@@ -12,12 +12,29 @@ try {
 }
 ?>
 
+<!-- Swiper Slider CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <!-- Page Specific Responsive & Figma Exact Styles -->
 <style>
 /* Page Scope Wrapper */
 .isaro-about-page {
     font-family: 'Poppins', sans-serif;
     color: #333333;
+}
+
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
 }
 
 /* 1. Hero Section */
@@ -166,13 +183,33 @@ try {
     opacity: 0.95;
 }
 
-/* 4. Meet Our Team Section */
+/* 4. Meet Our Team Section & Auto Background Slider Styles */
 .team-section {
     position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('assets/images/67d12759ce882ac6dba72d274c24e0c3e3f0bc10.png') center/cover no-repeat;
+    overflow: hidden;
     padding: 75px 0 85px 0;
     color: #ffffff;
     text-align: center;
+}
+
+.team-bg-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+.team-bg-slide.active {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .team-section-title {
@@ -365,29 +402,36 @@ try {
         </div>
     </section>
 
-    <!-- 4. MEET OUR TEAM SECTION (STRICTLY DYNAMIC FROM DATABASE) -->
+    <!-- 4. MEET OUR TEAM SECTION (AUTO SLIDING BACKGROUND & STRICTLY 4 VISIBLE MEMBER CARDS) -->
     <section class="team-section">
-        <div class="container">
+        <!-- 3 Layered Background Images for Automatic Crossfade -->
+        <div class="team-bg-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('assets/images/67d12759ce882ac6dba72d274c24e0c3e3f0bc10.png');"></div>
+        <div class="team-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg');"></div>
+        <div class="team-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('assets/images/b95b4009ce4b6e877bde5514673695345345fdcc.png');"></div>
+
+        <div class="container position-relative" style="z-index: 5;">
             <h2 class="team-section-title">Meet Our Team</h2>
 
-            <div class="row g-4">
-                <?php if(!empty($teamMembers)): ?>
-                    <?php foreach($teamMembers as $tm): ?>
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="team-card-item">
-                            <div class="team-member-img-box">
-                                <img src="<?php echo htmlspecialchars($tm['image']); ?>" alt="<?php echo htmlspecialchars($tm['name']); ?>">
+            <div class="swiper team-swiper">
+                <div class="swiper-wrapper">
+                    <?php if(!empty($teamMembers)): ?>
+                        <?php foreach($teamMembers as $tm): ?>
+                        <div class="swiper-slide h-auto py-2">
+                            <div class="team-card-item h-100">
+                                <div class="team-member-img-box">
+                                    <img src="<?php echo htmlspecialchars($tm['image']); ?>" alt="<?php echo htmlspecialchars($tm['name']); ?>">
+                                </div>
+                                <h4 class="team-member-name"><?php echo htmlspecialchars($tm['name']); ?></h4>
+                                <p class="team-member-desc"><?php echo htmlspecialchars($tm['designation'] ?? ''); ?></p>
                             </div>
-                            <h4 class="team-member-name"><?php echo htmlspecialchars($tm['name']); ?></h4>
-                            <p class="team-member-desc"><?php echo htmlspecialchars($tm['designation'] ?? ''); ?></p>
                         </div>
-                    </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="col-12 text-center">
-                        <p class="text-white mb-0">No team members available in database.</p>
-                    </div>
-                <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="swiper-slide text-center">
+                            <p class="text-white mb-0">No team members available in database.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </section>
@@ -398,5 +442,80 @@ try {
     </a>
 
 </div>
+
+<!-- Swiper Slider JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // 1. Automatic Background Image Slideshow Logic for Team Section
+    const teamSlides = document.querySelectorAll('.team-bg-slide');
+    if (teamSlides.length > 0) {
+        let currentTeamSlide = 0;
+        setInterval(function() {
+            teamSlides[currentTeamSlide].classList.remove('active');
+            currentTeamSlide = (currentTeamSlide + 1) % teamSlides.length;
+            teamSlides[currentTeamSlide].classList.add('active');
+        }, 4000);
+    }
+
+    // 2. Meet Our Team Cards Swiper
+    if (typeof Swiper !== 'undefined' && document.querySelector('.team-swiper')) {
+        new Swiper('.team-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                576: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                },
+                992: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                }
+            }
+        });
+    }
+
+    // 3. LANDING SCROLL REVEAL OBSERVER FOR ABOUT PAGE
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const aboutAnimElements = document.querySelectorAll(
+        ".who-text-col, .pill-image-wrapper, .vm-card, .team-card-item"
+    );
+
+    aboutAnimElements.forEach(function(el) {
+        el.classList.add("apple-reveal");
+        let delay = 0;
+        if (el.closest('.row')) {
+            let col = el.closest('[class*="col-"]');
+            if (col && col.parentElement) {
+                let siblings = Array.from(col.parentElement.children);
+                let idx = siblings.indexOf(col);
+                delay = (idx % 4) * 0.14;
+            }
+        }
+        el.style.transitionDelay = delay + 's';
+        revealObserver.observe(el);
+    });
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

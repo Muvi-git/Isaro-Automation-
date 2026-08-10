@@ -44,6 +44,9 @@ try {
 }
 ?>
 
+<!-- Swiper Slider CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <!-- Page Specific Responsive & Figma Exact Styles -->
 <style>
 /* Page Scope Wrapper */
@@ -222,7 +225,7 @@ try {
     color: #ffffff;
 }
 
-/* 3. Red Category Banner Section */
+/* 3. Red Category Highlight Banner Slider Section */
 .category-banner-section {
     background-color: #b03030;
     padding: 55px 0;
@@ -234,6 +237,11 @@ try {
     width: 100%;
     max-width: 330px;
     margin: 0 auto;
+    transition: transform 0.3s ease;
+}
+
+.category-banner-card:hover {
+    transform: translateY(-5px);
 }
 
 .category-banner-img {
@@ -257,6 +265,27 @@ try {
     font-weight: 600;
     margin: 0;
     letter-spacing: 0.2px;
+}
+
+/* Swiper Slider Dots Customization */
+.category-swiper-pagination {
+    position: relative !important;
+    margin-top: 25px !important;
+}
+
+.category-swiper-pagination .swiper-pagination-bullet {
+    background: #ffffff !important;
+    opacity: 0.4 !important;
+    width: 10px;
+    height: 10px;
+    transition: all 0.3s ease;
+}
+
+.category-swiper-pagination .swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    width: 28px;
+    border-radius: 6px;
+    background: #ffffff !important;
 }
 
 /* 4. New Arrivals Scroll Section */
@@ -369,36 +398,64 @@ try {
         </div>
     </section>
 
-    <!-- 3. RED CATEGORY HIGHLIGHT BANNER SECTION -->
+    <!-- 3. RED CATEGORY HIGHLIGHT BANNER SLIDER SECTION (STRICTLY 3 VISIBLE PER SLIDE) -->
     <section class="category-banner-section">
         <div class="container">
-            <div class="row g-4 justify-content-center">
-                <div class="col-12 col-md-4 d-flex justify-content-center">
-                    <div class="category-banner-card">
-                        <div class="category-banner-img">
-                            <img src="assets/images/32aa4dfd4e0fe44f84107df06e8e281fd9c2f2e6.png" alt="Electrical & Electronics Products">
+            <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                    <?php if(!empty($categories)): ?>
+                        <?php foreach($categories as $cat): 
+                            $catImg = !empty($cat['image']) ? $cat['image'] : 'assets/images/32aa4dfd4e0fe44f84107df06e8e281fd9c2f2e6.png';
+                            if (empty($cat['image'])) {
+                                $slug = strtolower($cat['slug']);
+                                if (strpos($slug, 'pneumatic') !== false) {
+                                    $catImg = 'assets/images/72bc19bc15c652ef1ebab5ea8ebbd18fc7f578e6.png';
+                                } elseif (strpos($slug, 'hydraulic') !== false) {
+                                    $catImg = 'assets/images/74190591cc61e45aafc1b8fc126a5b8cb44cc169.png';
+                                }
+                            }
+                        ?>
+                        <div class="swiper-slide d-flex justify-content-center">
+                            <a href="products.php?cat=<?php echo htmlspecialchars($cat['slug']); ?>" class="text-decoration-none w-100">
+                                <div class="category-banner-card">
+                                    <div class="category-banner-img">
+                                        <img src="<?php echo htmlspecialchars($catImg); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>">
+                                    </div>
+                                    <h4 class="category-banner-title"><?php echo htmlspecialchars($cat['name']); ?></h4>
+                                </div>
+                            </a>
                         </div>
-                        <h4 class="category-banner-title">Electrical & Electronics Products</h4>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-4 d-flex justify-content-center">
-                    <div class="category-banner-card">
-                        <div class="category-banner-img">
-                            <img src="assets/images/72bc19bc15c652ef1ebab5ea8ebbd18fc7f578e6.png" alt="Pneumatic Products">
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <!-- Default Static Fallback Banners -->
+                        <div class="swiper-slide d-flex justify-content-center">
+                            <div class="category-banner-card">
+                                <div class="category-banner-img">
+                                    <img src="assets/images/32aa4dfd4e0fe44f84107df06e8e281fd9c2f2e6.png" alt="Electrical & Electronics Products">
+                                </div>
+                                <h4 class="category-banner-title">Electrical & Electronics Products</h4>
+                            </div>
                         </div>
-                        <h4 class="category-banner-title">Pneumatic Products</h4>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-4 d-flex justify-content-center">
-                    <div class="category-banner-card">
-                        <div class="category-banner-img">
-                            <img src="assets/images/74190591cc61e45aafc1b8fc126a5b8cb44cc169.png" alt="Hydraulic Products">
+                        <div class="swiper-slide d-flex justify-content-center">
+                            <div class="category-banner-card">
+                                <div class="category-banner-img">
+                                    <img src="assets/images/72bc19bc15c652ef1ebab5ea8ebbd18fc7f578e6.png" alt="Pneumatic Products">
+                                </div>
+                                <h4 class="category-banner-title">Pneumatic Products</h4>
+                            </div>
                         </div>
-                        <h4 class="category-banner-title">Hydraulic Products</h4>
-                    </div>
+                        <div class="swiper-slide d-flex justify-content-center">
+                            <div class="category-banner-card">
+                                <div class="category-banner-img">
+                                    <img src="assets/images/74190591cc61e45aafc1b8fc126a5b8cb44cc169.png" alt="Hydraulic Products">
+                                </div>
+                                <h4 class="category-banner-title">Hydraulic Products</h4>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
+                <!-- Pagination Dots -->
+                <div class="swiper-pagination category-swiper-pagination"></div>
             </div>
         </div>
     </section>
@@ -476,7 +533,10 @@ try {
 
 </div>
 
-<!-- Navigation, Compare & Perfect Scroll Reveal Script -->
+<!-- Swiper Slider JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- Navigation, Compare, Slider & Scroll Reveal Script -->
 <script>
 function navigateToDetail(event, url) {
     if (event.target.closest('button') || event.target.closest('a')) {
@@ -518,8 +578,32 @@ function addToCompare(event, title, code, price, img) {
     }
 }
 
-// Custom Sequential Scroll Reveal for Products Page
 document.addEventListener("DOMContentLoaded", function() {
+    // 1. Initialize Swiper Slider for Category Banner Section
+    const categorySwiper = new Swiper('.category-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.category-swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            576: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            992: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+            }
+        }
+    });
+
+    // 2. Sequential Scroll Reveal for Products Page
     const observerOptions = { root: null, rootMargin: "0px 0px -40px 0px", threshold: 0.05 };
     const revealObserver = new IntersectionObserver(function(entries, observer) {
         entries.forEach(function(entry) {
@@ -530,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }, observerOptions);
 
-    // 1. Grid Products Staggering (Strictly L to R)
+    // Grid Products Staggering (Strictly L to R)
     document.querySelectorAll('.products-main-section .row').forEach(row => {
         Array.from(row.children).forEach((col, index) => {
             const card = col.querySelector('.product-card');
@@ -542,19 +626,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // 2. Category Banners Staggering
-    document.querySelectorAll('.category-banner-section .row').forEach(row => {
-        Array.from(row.children).forEach((col, index) => {
-            const card = col.querySelector('.category-banner-card');
-            if(card) {
-                card.classList.add('apple-reveal');
-                card.style.transitionDelay = ((index % 3) * 0.15) + 's';
-                revealObserver.observe(card);
-            }
-        });
-    });
-
-    // 3. New Arrivals Horizontal Staggering
+    // New Arrivals Horizontal Staggering
     document.querySelectorAll('.new-arrivals-card .product-card').forEach((card, index) => {
         card.classList.add('apple-reveal');
         card.style.transitionDelay = ((index % 10) * 0.1) + 's';
