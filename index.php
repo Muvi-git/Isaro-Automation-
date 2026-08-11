@@ -277,12 +277,12 @@ $faceAvatars = [
 
 <div class="isaro-main-wrapper">
 
-<!-- 1. HERO BANNER WITH AUTOMATIC BACKGROUND SLIDESHOW -->
+<!-- 1. HERO BANNER WITH AUTOMATIC BACKGROUND SLIDESHOW (EXACT 0.68 OVERLAY CONTRAST MATCHING ABOUT US PAGE) -->
 <section class="isaro-hero-section text-white py-5">
-    <!-- 3 Layered Background Images for Automatic Crossfade -->
-    <div class="hero-bg-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg');"></div>
-    <div class="hero-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/c84739eb2ed88a5d12b5a4eaa2f2b5d9cc173fe8.jpg');"></div>
-    <div class="hero-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/7e3d191a15ac23b17a1f8a34d1a0cbed7c03be85.jpg');"></div>
+    <!-- 3 Layered Background Images with Exact 0.68 Dark Opacity Overlay -->
+    <div class="hero-bg-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/7530266532463de32d07c4ca427023eb7147db57.png');"></div>
+    <div class="hero-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d (1).jpg');"></div>
+    <div class="hero-bg-slide" style="background-image: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/b95b4009ce4b6e877bde5514673695345345fdcc.png');"></div>
 
     <div class="container text-center py-4 position-relative" style="z-index: 5;">
         <h1 class="hero-title fw-bold mb-3" style="font-size: 2.8rem; line-height: 1.25; letter-spacing: -0.3px;">
@@ -381,7 +381,7 @@ $faceAvatars = [
     </div>
 </section>
 
-<!-- 3. SPECIAL OFFER (DYNAMIC FROM DATABASE ONLY) -->
+<!-- 3. SPECIAL OFFER (DYNAMIC FROM DATABASE ONLY WITH DARK OVERLAY) -->
 <section class="offer-section py-0 bg-light">
     <div class="container-fluid px-0">
         <div id="offerBannerCarousel" class="carousel slide carousel-fade position-relative" data-bs-ride="carousel" data-bs-interval="3000" style="overflow: hidden;">
@@ -396,11 +396,12 @@ $faceAvatars = [
                     <?php foreach($dbOffers as $idx => $off): ?>
                     <div class="carousel-item <?php echo ($idx === 0) ? 'active' : ''; ?>">
                         <div class="d-flex align-items-center justify-content-center offer-banner-bg" style="background: url('<?php echo htmlspecialchars($off['bg_image']); ?>') center top / cover no-repeat; min-height: 520px; position: relative;">
-                            <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.1); z-index: 1;"></div>
-                            <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(8px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
+                            <!-- Darkened Overlay for Banner Image -->
+                            <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0, 0, 0, 0.45); z-index: 1;"></div>
+                            <div class="text-center p-4 p-md-5 offer-card-box" style="position: relative; z-index: 2; background: rgba(255, 255, 255, 0.78); backdrop-filter: blur(10px); border-radius: 18px; max-width: 580px; width: 88%; box-shadow: 0 10px 30px rgba(0,0,0,0.22);">
                                 <h3 class="fw-bold text-dark fs-4 mb-1"><?php echo htmlspecialchars($off['title']); ?></h3>
                                 <h2 class="fw-extrabold fs-3 mb-2" style="color: #b03030;"><?php echo htmlspecialchars($off['highlight_price']); ?></h2>
-                                <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #444444 !important;">
+                                <p class="text-secondary x-small mb-4 mx-auto" style="max-width: 460px; line-height: 1.5; font-size: 0.78rem; color: #333333 !important;">
                                     <?php echo htmlspecialchars($off['description']); ?>
                                 </p>
                                 <a href="<?php echo htmlspecialchars($off['btn_link'] ?? 'products.php'); ?>" class="btn text-white px-4 py-2 fw-semibold rounded-2 shadow-sm" style="background-color: #b03030; border: none;">Limited Time Offer</a>
