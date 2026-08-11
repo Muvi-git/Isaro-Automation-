@@ -332,12 +332,12 @@ try {
 
 <div class="isaro-main-wrapper isaro-products-page">
 
-    <!-- 1. HERO SECTION -->
+   <!-- 1. HERO SECTION -->
     <section class="products-hero-section py-5">
         <div class="container py-4">
             <h1 class="products-hero-title">Our Products</h1>
             <p class="products-hero-p">
-                elementum vehicula. Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
+                Explore our extensive range of premium industrial automation products, including top-tier electrical, pneumatic, and hydraulic components sourced from world-renowned global manufacturers.
             </p>
         </div>
     </section>

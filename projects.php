@@ -252,7 +252,7 @@ try {
         <div class="container py-4">
             <h1 class="projects-hero-title">Projects</h1>
             <p class="projects-hero-p">
-                elementum vehicula. Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
+                Discover our successfully executed engineering projects, showcasing advanced electrical, pneumatic, and hydraulic automation solutions tailored for modern industrial efficiency.
             </p>
         </div>
     </section>

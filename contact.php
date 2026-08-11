@@ -368,7 +368,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container py-4">
             <h1 class="contact-hero-title">Contact Us</h1>
             <p class="contact-hero-p">
-                elementum vehicula. Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
+                Get in touch with our engineering team for technical support, product inquiries, and custom industrial automation solutions tailored to your operational needs.
             </p>
         </div>
     </section>

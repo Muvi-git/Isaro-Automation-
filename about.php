@@ -319,12 +319,12 @@ try {
 
 <div class="isaro-main-wrapper isaro-about-page">
 
-    <!-- 1. HERO SECTION -->
+   <!-- 1. HERO SECTION -->
     <section class="about-hero-section py-5">
         <div class="container py-4">
             <h1 class="about-hero-title">About Us</h1>
             <p class="about-hero-p">
-                elementum vehicula. Donec tempor Cras commodo non, sit Nam urna. Ut ex adipiscing gravida venenatis vitae commodo lacus nisi diam quis felis, fringilla diam x scelerisque tempor elit. varius vitae tincidunt Donec Nunc Nam luctus turpis nec risus ex Lorem eu
+                Leading Sri Lanka’s industrial automation sector since 1999. We deliver cutting-edge electrical, pneumatic, and hydraulic systems backed by world-class global technology and expert engineering excellence.
             </p>
         </div>
     </section>
@@ -518,4 +518,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?> 
