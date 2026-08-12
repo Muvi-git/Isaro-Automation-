@@ -59,12 +59,13 @@ $admin_page = basename($_SERVER['PHP_SELF']);
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 1000;
+            z-index: 1050;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease-in-out;
         }
 
         /* Sidebar Navigation Links */
@@ -102,6 +103,7 @@ $admin_page = basename($_SERVER['PHP_SELF']);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: margin-left 0.3s ease-in-out;
         }
 
         /* Top Header Bar */
@@ -115,7 +117,7 @@ $admin_page = basename($_SERVER['PHP_SELF']);
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
 
-        /* Page Content Area (80px bottom padding keeps fixed footer from overlapping) */
+        /* Page Content Area */
         .admin-content {
             padding: 28px 30px 80px 30px;
             flex: 1 0 auto;
@@ -132,20 +134,65 @@ $admin_page = basename($_SERVER['PHP_SELF']);
             border-top: 1px solid #e5e9f2;
             padding: 12px 30px;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+            transition: left 0.3s ease-in-out;
+        }
+
+        /* Sidebar Backdrop Overlay for Mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1040;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 991.98px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+            .admin-sidebar.show {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+            .admin-main-wrapper {
+                margin-left: 0 !important;
+            }
+            .admin-footer {
+                left: 0 !important;
+            }
+            .top-navbar {
+                padding: 12px 16px !important;
+            }
+            .admin-content {
+                padding: 16px 16px 80px 16px !important;
+            }
         }
     </style>
 </head>
 <body>
 
+<!-- MOBILE OVERLAY BACKDROP -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleAdminSidebar()"></div>
+
 <!-- FIXED LEFT SIDEBAR -->
-<div class="admin-sidebar">
+<div class="admin-sidebar" id="adminSidebar">
     <div>
         <!-- Logo Section -->
-        <div class="p-3 text-center border-bottom mb-3 bg-white">
+        <div class="p-3 text-center border-bottom mb-3 bg-white d-flex align-items-center justify-content-between justify-content-lg-center">
             <a href="index.php" class="text-decoration-none">
                 <img src="../assets/images/Untitled - 12 August 2026 at 09.47.16.png" class="img-fluid" style="max-height: 45px;" onerror="this.src='https://via.placeholder.com/150x45?text=ISARO+AUTOMATION'">
             </a>
-            <span class="badge bg-danger-subtle text-danger border border-danger-subtle mt-2 d-block mx-auto fw-bold" style="width: max-content; font-size: 0.68rem; letter-spacing: 0.5px;">
+            <button type="button" class="btn-close d-lg-none" onclick="toggleAdminSidebar()"></button>
+        </div>
+        
+        <div class="px-3 mb-3 text-center">
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle d-block mx-auto fw-bold" style="width: max-content; font-size: 0.68rem; letter-spacing: 0.5px;">
                 CONTROL PANEL v2.0
             </span>
         </div>
@@ -215,19 +262,33 @@ $admin_page = basename($_SERVER['PHP_SELF']);
     <!-- TOP NAVBAR -->
     <div class="top-navbar d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-2">
-            <span class="text-secondary fw-semibold fs-6">Isaro Management Hub</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm d-lg-none me-2" onclick="toggleAdminSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <span class="text-secondary fw-semibold fs-6 d-none d-sm-inline">Isaro Management Hub</span>
         </div>
-        <div class="d-flex align-items-center gap-3">
-            <a href="../index.php" target="_blank" class="btn btn-sm btn-outline-secondary rounded-2 px-3 fw-medium">
-                <i class="fas fa-external-link-alt me-1 fs-7"></i> Visit Website
+        <div class="d-flex align-items-center gap-2 gap-sm-3">
+            <a href="../index.php" target="_blank" class="btn btn-sm btn-outline-secondary rounded-2 px-2 px-sm-3 fw-medium" style="font-size: 0.8rem;">
+                <i class="fas fa-external-link-alt me-1 fs-7"></i> <span class="d-none d-sm-inline">Visit </span>Site
             </a>
             <div class="vr bg-secondary opacity-25" style="height: 20px;"></div>
             <span class="fw-semibold fs-7 text-dark d-flex align-items-center gap-2">
                 <i class="fas fa-user-circle fs-5 text-danger"></i> 
-                <?php echo htmlspecialchars($_SESSION['admin_name'] ?? $_SESSION['admin_username'] ?? 'System Admin'); ?>
+                <span class="d-none d-sm-inline"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? $_SESSION['admin_username'] ?? 'System Admin'); ?></span>
             </span>
         </div>
     </div>
+
+    <script>
+    function toggleAdminSidebar() {
+        var sidebar = document.getElementById('adminSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+    }
+    </script>
 
     <!-- PAGE CONTENT CONTAINER -->
     <div class="admin-content">

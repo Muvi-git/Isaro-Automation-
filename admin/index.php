@@ -58,6 +58,50 @@ $recentInquiries = $pdo->query("SELECT * FROM inquiries ORDER BY id DESC LIMIT 5
     padding: 26px 30px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
+
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET ADMIN RESPONSIVENESS
+   ========================================================= */
+@media (max-width: 991.98px) {
+    .admin-card-container {
+        padding: 1.25rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .welcome-banner {
+        padding: 1.25rem 1rem !important;
+        border-radius: 12px !important;
+    }
+    .welcome-banner h4 {
+        font-size: 1.2rem !important;
+    }
+    .welcome-banner .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    .dashboard-stat-card {
+        padding: 16px !important;
+        border-radius: 12px !important;
+    }
+    .stat-icon-wrapper {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1.15rem !important;
+    }
+    .admin-card-container {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+    .table-responsive {
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 8px !important;
+    }
+    .table th, .table td {
+        padding: 10px 8px !important;
+        white-space: nowrap !important;
+    }
+}
 </style>
 
 <!-- Welcome Banner / Quick Shortcuts Header -->
@@ -152,13 +196,15 @@ $recentInquiries = $pdo->query("SELECT * FROM inquiries ORDER BY id DESC LIMIT 5
 </div>
 
 <!-- Recent Inquiries Table -->
-<div class="bg-white p-4 rounded-3 border shadow-sm mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+<div class="bg-white p-4 rounded-3 border shadow-sm mb-4 admin-card-container">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3 pb-2 border-bottom">
         <div>
             <h6 class="fw-bold text-dark mb-1"><i class="fas fa-inbox me-2 text-danger"></i> Recent Customer Quotations & Messages</h6>
             <p class="text-muted x-small mb-0" style="font-size: 0.78rem;">Recent inquiries submitted via website quote requests and contact forms.</p>
         </div>
-        <a href="inquiries.php" class="btn btn-sm btn-outline-danger fw-semibold px-3 py-1 fs-7">View All Inquiries</a>
+        <div>
+            <a href="inquiries.php" class="btn btn-sm btn-outline-danger fw-semibold px-3 py-1 fs-7">View All Inquiries</a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle fs-7 mb-0">

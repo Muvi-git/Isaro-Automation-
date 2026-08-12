@@ -1,4 +1,4 @@
-<?php
+<?php 
 include 'includes/header.php';
 
 // Handle Delete FAQ
@@ -56,10 +56,65 @@ $faqs = $stmt->fetchAll();
     color: #ffffff !important;
     border-color: #b03030 !important;
 }
+
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET ADMIN RESPONSIVENESS
+   ========================================================= */
+@media (max-width: 991.98px) {
+    .admin-card-container {
+        padding: 1.25rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .admin-card-container {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+    .admin-top-banner {
+        padding: 1rem !important;
+        border-radius: 12px !important;
+    }
+    .admin-top-banner h4 {
+        font-size: 1.2rem !important;
+    }
+    .admin-top-banner .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    .table-responsive {
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 8px !important;
+    }
+    .table th, .table td {
+        padding: 10px 8px !important;
+        white-space: nowrap !important;
+    }
+    .admin-pagination-box {
+        padding: 0.75rem !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .admin-pagination-box .pagination {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    .custom-page-btn {
+        padding: 4px 10px !important;
+        font-size: 0.78rem !important;
+    }
+    .modal-dialog {
+        margin: 0.5rem !important;
+    }
+    .modal-body {
+        padding: 1rem !important;
+    }
+}
 </style>
 
 <!-- Top Title Banner -->
-<div class="bg-white p-4 rounded-3 border shadow-sm mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+<div class="bg-white p-4 rounded-3 border shadow-sm mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 admin-top-banner">
     <div>
         <h4 class="fw-bold text-dark mb-1"><i class="fas fa-question-circle text-danger me-2"></i>FAQs Management</h4>
         <p class="text-muted x-small mb-0" style="font-size: 0.83rem;">Manage frequently asked questions and answers displayed on the user FAQ page.</p>
@@ -72,7 +127,7 @@ $faqs = $stmt->fetchAll();
 </div>
 
 <!-- FAQs Table -->
-<div class="bg-white p-4 rounded-3 border shadow-sm mb-4">
+<div class="bg-white p-4 rounded-3 border shadow-sm mb-4 admin-card-container">
     <div class="table-responsive">
         <table class="table table-hover align-middle fs-7 mb-0">
             <thead class="table-light">
@@ -111,7 +166,7 @@ $faqs = $stmt->fetchAll();
 
     <!-- PROMINENT HIGH-VISIBILITY PAGINATION BAR -->
     <?php if ($total_pages > 1): ?>
-    <div class="p-3 bg-light rounded-3 border mt-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+    <div class="p-3 bg-light rounded-3 border mt-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 admin-pagination-box">
         <div class="d-flex align-items-center gap-2">
             <span class="badge bg-white text-dark border px-3 py-2 shadow-sm fs-7 fw-medium" style="font-size: 0.82rem;">
                 <i class="fas fa-list me-1 text-danger"></i> Showing <strong class="text-danger"><?php echo $offset + 1; ?> - <?php echo min($offset + $items_per_page, $total_faqs); ?></strong> of <strong><?php echo $total_faqs; ?></strong> FAQs
