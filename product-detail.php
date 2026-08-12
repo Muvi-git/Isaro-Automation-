@@ -465,7 +465,7 @@ if ($product) {
                         <i class="fas fa-paper-plane"></i> Get a Quote
                     </button>
 
-                    <a href="https://wa.me/94719847787?text=Hi%20Isaro%20Automation,%20I%20am%20interested%20in%20<?php echo urlencode($product['title']); ?>" target="_blank" class="btn btn-whatsapp-inquire d-flex align-items-center gap-2">
+                    <a href="https://wa.me/94114216784?text=Hi%20Isaro%20Automation,%20I%20am%20interested%20in%20<?php echo urlencode($product['title']); ?>" target="_blank" class="btn btn-whatsapp-inquire d-flex align-items-center gap-2">
                         <i class="fab fa-whatsapp fs-5"></i> Chat on WhatsApp
                     </a>
 
@@ -758,7 +758,7 @@ if ($product) {
 <?php endif; ?>
 
 <!-- Floating WhatsApp Chat -->
-<a href="https://wa.me/94719847787" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+<a href="https://wa.me/94114216784" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
     <i class="fab fa-whatsapp"></i>
 </a>
 

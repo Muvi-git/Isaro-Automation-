@@ -286,7 +286,7 @@ function renderCompareTable() {
         html += `
             <td>
                 <a href="product-detail.php" class="btn btn-sm text-white fw-semibold px-3 py-1 mb-1 d-block" style="background-color: #b03030;">View Details</a>
-                <a href="https://wa.me/94719847787?text=Inquiry%20regarding%20product:%20${encodeURIComponent(item.title)}" target="_blank" class="btn btn-sm btn-outline-success fw-semibold px-3 py-1 d-block"><i class="fab fa-whatsapp me-1"></i> Inquire</a>
+                <a href="https://wa.me/94114216784?text=Inquiry%20regarding%20product:%20${encodeURIComponent(item.title)}" target="_blank" class="btn btn-sm btn-outline-success fw-semibold px-3 py-1 d-block"><i class="fab fa-whatsapp me-1"></i> Inquire</a>
             </td>
         `;
     });

@@ -143,7 +143,7 @@ $admin_page = basename($_SERVER['PHP_SELF']);
         <!-- Logo Section -->
         <div class="p-3 text-center border-bottom mb-3 bg-white">
             <a href="index.php" class="text-decoration-none">
-                <img src="../assets/images/industrial_automation_logo 1.png" class="img-fluid" style="max-height: 45px;" onerror="this.src='https://via.placeholder.com/150x45?text=ISARO+AUTOMATION'">
+                <img src="../assets/images/Untitled - 12 August 2026 at 09.47.16.png" class="img-fluid" style="max-height: 45px;" onerror="this.src='https://via.placeholder.com/150x45?text=ISARO+AUTOMATION'">
             </a>
             <span class="badge bg-danger-subtle text-danger border border-danger-subtle mt-2 d-block mx-auto fw-bold" style="width: max-content; font-size: 0.68rem; letter-spacing: 0.5px;">
                 CONTROL PANEL v2.0

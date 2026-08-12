@@ -50,7 +50,7 @@
             <!-- Col 1: Logo & Subscribe -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="bg-white p-2 rounded-2 mb-4 d-inline-block" style="max-width: 200px;">
-                    <img src="assets/images/industrial_automation_logo 1.png" alt="Isaro Automation" class="img-fluid">
+                    <img src="assets/images/Untitled - 12 August 2026 at 09.47.16.png" alt="Isaro Automation" class="img-fluid">
                 </div>
                 <h5 class="text-white fw-medium mb-3 fs-5">Subscribe</h5>
                 <form action="#" method="POST">

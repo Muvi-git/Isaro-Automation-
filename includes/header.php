@@ -730,7 +730,7 @@ header.isaro-navbar {
     <div class="container">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" href="index.php">
-            <img src="assets/images/industrial_automation_logo 1.png" alt="Isaro Automation Logo" class="img-fluid">
+            <img src="assets/images/Untitled - 12 August 2026 at 09.47.16.png" alt="Isaro Automation Logo" class="img-fluid">
         </a>
 
         <!-- Mobile Toggler -->

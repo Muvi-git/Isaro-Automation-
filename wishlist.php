@@ -306,7 +306,7 @@
 </div>
 
 <!-- Floating WhatsApp Chat Button -->
-<a href="https://wa.me/94719847787" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+<a href="https://wa.me/94114216784" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
     <i class="fab fa-whatsapp"></i>
 </a>
 
@@ -340,7 +340,7 @@ function renderWishlist() {
             </div>
         `;
         if (summaryCount) summaryCount.innerText = '0 Items';
-        if (whatsappBtn) whatsappBtn.href = "https://wa.me/94719847787?text=Hi%20Isaro%20Automation,%20I%20have%20an%20inquiry.";
+        if (whatsappBtn) whatsappBtn.href = "https://wa.me/94114216784?text=Hi%20Isaro%20Automation,%20I%20have%20an%20inquiry.";
         return;
     }
 
@@ -378,7 +378,7 @@ function renderWishlist() {
 
     var encodedText = encodeURIComponent(textForWhatsApp + "\nPlease send availability & proforma invoice.");
     if (whatsappBtn) {
-        whatsappBtn.href = "https://wa.me/94719847787?text=" + encodedText;
+        whatsappBtn.href = "https://wa.me/94114216784?text=" + encodedText;
     }
 }
 

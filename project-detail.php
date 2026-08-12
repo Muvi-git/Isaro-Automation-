@@ -303,7 +303,7 @@ if ($project) {
                         <i class="fas fa-envelope"></i> Request Similar Project Quote
                     </button>
 
-                    <a href="https://wa.me/94719847787?text=Hi%20Isaro%20Automation,%20I%20want%20to%20inquire%20about%20your%20<?php echo urlencode($project['title']); ?>%20project." target="_blank" class="btn-project-whatsapp">
+                    <a href="https://wa.me/94114216784?text=Hi%20Isaro%20Automation,%20I%20want%20to%20inquire%20about%20your%20<?php echo urlencode($project['title']); ?>%20project." target="_blank" class="btn-project-whatsapp">
                         <i class="fab fa-whatsapp fs-5"></i> Discuss via WhatsApp
                     </a>
                 </div>
@@ -391,7 +391,7 @@ if ($project) {
 </div>
 
 <!-- Floating WhatsApp Button -->
-<a href="https://wa.me/94719847787" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+<a href="https://wa.me/94114216784" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
     <i class="fab fa-whatsapp"></i>
 </a>
 

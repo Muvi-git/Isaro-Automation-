@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <div class="login-card">
     <div class="text-center mb-4">
-        <img src="../assets/images/industrial_automation_logo 1.png" class="img-fluid mb-2" style="max-height: 50px;" alt="Isaro Logo">
+        <img src="../assets/images/Untitled - 12 August 2026 at 09.47.16.png" class="img-fluid mb-2" style="max-height: 50px;" alt="Isaro Logo">
         <h5 class="fw-bold text-dark mt-2 mb-1">Control Panel Access</h5>
         <p class="text-muted small mb-0" style="font-size: 0.8rem;">Enter your admin credentials to log in.</p>
     </div>
