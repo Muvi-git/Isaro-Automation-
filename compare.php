@@ -9,6 +9,20 @@
     min-height: 70vh;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* Breadcrumb */
 .custom-breadcrumb {
     background-color: #ffffff;
@@ -37,6 +51,7 @@
     border: 1px solid #e8e8e8;
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .compare-table {
@@ -156,6 +171,66 @@
     color: #cccccc;
     margin-bottom: 15px;
 }
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE RESPONSIVENESS (MATCHING ALL PAGES)
+   ========================================================= */
+@media (max-width: 575.98px) {
+    /* 1. Header & Breadcrumb Mobile Optimization */
+    .custom-breadcrumb { padding: 10px 0 !important; }
+    .custom-breadcrumb a, .custom-breadcrumb .active { font-size: 0.75rem !important; }
+    .isaro-compare-wrapper h2 { font-size: 1.35rem !important; }
+    
+    /* 2. Compare Table Card Mobile Touch Scrolling */
+    .compare-table-card { border-radius: 12px !important; }
+    .empty-compare-box { padding: 40px 15px !important; }
+    .empty-compare-icon { font-size: 2.8rem !important; }
+
+    /* 3. Floating WhatsApp Button Mobile Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
+}
 </style>
 
 <div class="isaro-compare-wrapper">
@@ -193,6 +268,11 @@
 
 </div>
 
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/94114216784" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 </div>
 
 <script>
@@ -211,7 +291,7 @@ function renderCompareTable() {
 
     if (items.length === 0) {
         container.innerHTML = `
-            <div class="empty-compare-box">
+            <div class="empty-compare-box apple-reveal is-revealed">
                 <i class="fas fa-balance-scale empty-compare-icon"></i>
                 <h5 class="fw-bold text-dark mb-2">No Products Added to Comparison</h5>
                 <p class="text-muted fs-7 mb-4">Select products from our catalog to compare specifications side-by-side.</p>
@@ -312,6 +392,23 @@ function clearCompareList() {
 
 document.addEventListener('DOMContentLoaded', function() {
     renderCompareTable();
+
+    // Apple-Style Scroll Reveal Observer
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const compareCard = document.getElementById('compareContainer');
+    if (compareCard) {
+        compareCard.classList.add('apple-reveal');
+        revealObserver.observe(compareCard);
+    }
 });
 </script>
 

@@ -42,6 +42,34 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(200, 35, 51, 0.3) !important;
         }
+
+        /* =========================================================
+           APPLE-GRADE MOBILE & TABLET RESPONSIVENESS FOR FOOTER
+           ========================================================= */
+        @media (max-width: 991.98px) {
+            .isaro-footer { padding-top: 3rem !important; }
+        }
+
+        @media (max-width: 575.98px) {
+            .isaro-footer { padding-top: 2.2rem !important; }
+            .isaro-footer h5 { font-size: 1.05rem !important; margin-bottom: 0.75rem !important; }
+            .isaro-footer p, .isaro-footer div, .isaro-footer a, .isaro-footer span { font-size: 0.8rem !important; }
+            
+            /* Subscribe Form Mobile Full Width */
+            .isaro-subscribe-input-box {
+                max-width: 100% !important;
+            }
+            
+            /* App Badges & QR Code Mobile Alignment */
+            .isaro-app-badge { width: 120px !important; }
+            
+            /* Social Icons Spacing & Touch Size on Mobile */
+            .isaro-social-icons-box { gap: 1.5rem !important; }
+            .isaro-social-icon { font-size: 1.2rem !important; }
+            
+            /* Copyright Padding */
+            .isaro-copyright-box { font-size: 0.75rem !important; padding: 12px 0 !important; }
+        }
     </style>
 
     <div class="container pb-4">
@@ -49,12 +77,12 @@
             
             <!-- Col 1: Logo & Subscribe -->
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="bg-white p-2 rounded-2 mb-4 d-inline-block" style="max-width: 200px;">
+                <div class="bg-white p-2 rounded-2 mb-3 mb-md-4 d-inline-block" style="max-width: 200px;">
                     <img src="assets/images/Untitled - 12 August 2026 at 09.47.16.png" alt="Isaro Automation" class="img-fluid">
                 </div>
                 <h5 class="text-white fw-medium mb-3 fs-5">Subscribe</h5>
                 <form action="#" method="POST">
-                    <div class="position-relative" style="max-width: 230px;">
+                    <div class="position-relative isaro-subscribe-input-box" style="max-width: 230px;">
                         <input type="email" name="subscribe_email" class="form-control bg-transparent text-white rounded-1 py-2 pe-5 isaro-subscribe-input" placeholder="Enter your email" required style="font-size: 0.82rem; border: 1px solid #777;">
                         <button class="btn border-0 text-white position-absolute end-0 top-50 translate-middle-y px-3 isaro-sub-btn" type="submit" style="background: transparent;">
                             <i class="far fa-paper-plane" style="font-size: 1rem;"></i>
@@ -81,8 +109,8 @@
                 <div class="d-flex align-items-start">
                     <i class="fas fa-phone-alt text-white fs-5 me-3 mt-1" style="transform: scaleX(-1);"></i>
                     <div class="text-white-50" style="font-size: 0.85rem; line-height: 1.5;">
-                        <a href="tel:+94114011784" class="text-white-50 text-decoration-none">+ 94 11 4011784</a><br>
-                        <a href="tel:+94114216784" class="text-white-50 text-decoration-none">+ 94 11 4216784</a>
+                        <a href="tel:+94114011784" class="text-white-50 text-decoration-none isaro-footer-link">+ 94 11 4011784</a><br>
+                        <a href="tel:+94114216784" class="text-white-50 text-decoration-none isaro-footer-link">+ 94 11 4216784</a>
                     </div>
                 </div>
             </div>
@@ -129,11 +157,11 @@
                 </div>
 
                 <!-- Social Icons Row -->
-                <div class="d-flex gap-4 text-white fs-5 pt-1">
-                    <a href="#" class="isaro-social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="isaro-social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="isaro-social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="isaro-social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <div class="d-flex gap-4 text-white fs-5 pt-1 isaro-social-icons-box">
+                    <a href="#" class="isaro-social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="isaro-social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="isaro-social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="isaro-social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
 
@@ -146,7 +174,7 @@
     </div>
 
     <!-- Bottom Copyright -->
-    <div class="py-3 text-center text-white-50" style="font-size: 0.8rem;">
+    <div class="py-3 text-center text-white-50 isaro-copyright-box" style="font-size: 0.8rem;">
         <div class="container">
             <p class="mb-0">&copy; <?php echo date('Y'); ?> SLT Digital. All rights reserved.</p>
         </div>

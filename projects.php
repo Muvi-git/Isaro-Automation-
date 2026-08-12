@@ -226,7 +226,44 @@ try {
     font-weight: 300;
 }
 
-/* Responsiveness Fine-Tuning */
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET RESPONSIVENESS (MATCHING ALL PAGES)
+   ========================================================= */
 @media (max-width: 991.98px) {
     .projects-hero-title { font-size: 2.2rem; }
     .section-main-title { font-size: 1.8rem; }
@@ -237,11 +274,73 @@ try {
 }
 
 @media (max-width: 575.98px) {
-    .projects-hero-title { font-size: 1.8rem; }
-    .section-main-title { font-size: 1.5rem; }
-    .recent-card-large, .recent-card-small { height: 240px; }
-    .whatsapp-float { width: 52px; height: 52px; font-size: 28px; }
-    .project-img-box { height: 150px; }
+    /* 1. Hero Section Mobile Optimization */
+    .projects-hero-section { min-height: 280px !important; padding: 2.5rem 0 !important; }
+    .projects-hero-title { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; margin-bottom: 10px !important; }
+    .projects-hero-p { font-size: 0.8rem !important; line-height: 1.5 !important; padding: 0 10px; }
+
+    /* 2. Recent Projects Section Mobile Optimization */
+    .recent-projects-section { padding: 35px 0 25px 0 !important; }
+    .section-main-title { font-size: 1.5rem !important; margin-bottom: 20px !important; }
+    .recent-card-large { height: 250px !important; border-radius: 14px !important; }
+    .recent-card-small { height: 180px !important; border-radius: 14px !important; }
+    .recent-title { font-size: 0.95rem !important; margin-bottom: 2px !important; }
+    .recent-desc { font-size: 0.68rem !important; line-height: 1.35 !important; }
+    .recent-overlay { padding: 10px 12px !important; }
+
+    /* 3. All Projects Grid Section Mobile Optimization (2 Cards Side-by-Side) */
+    .all-projects-section { padding-bottom: 45px !important; }
+    .all-projects-section .row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin-left: -4px !important;
+        margin-right: -4px !important;
+    }
+    
+    .all-projects-section .row > [class*="col-"] {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .project-grid-card {
+        padding: 10px 8px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.05) !important;
+    }
+
+    .project-img-box {
+        height: 115px !important;
+        margin-bottom: 8px !important;
+        border-radius: 8px !important;
+    }
+
+    .project-grid-title {
+        font-size: 0.78rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 4px !important;
+    }
+
+    .project-grid-desc {
+        font-size: 0.68rem !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    /* 4. Floating WhatsApp Button Safe Mobile Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 

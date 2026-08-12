@@ -37,10 +37,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     color: #333333;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* 1. Hero Section */
 .contact-hero-section {
     position: relative;
-    /* IMAGE PLACEHOLDER: Hero Dark Industrial Background Image */
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.68)), url('assets/images/feedf7b7a69a5cfc65e4d847497ca581f69a9a4d.jpg') center/cover no-repeat;
     min-height: 340px;
     display: flex;
@@ -94,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     z-index: 2;
 }
 
-/* Decorative Overlapping Circles Overlay on Dark Card Bottom-Right */
 .contact-info-card::after {
     content: '';
     position: absolute;
@@ -213,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     object-fit: cover;
 }
 
-/* 3. Form & Map Section (Map & Form Bottom Alignment Perfect Match) */
+/* 3. Form & Map Section */
 .contact-form-section {
     background-color: #f4f4f4;
     padding-bottom: 75px;
@@ -285,7 +297,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     font-weight: 300;
 }
 
-/* Message Textarea Height Matching Map Bottom Line */
 .contact-form textarea.form-control-custom {
     min-height: 135px;
     resize: none;
@@ -344,7 +355,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     100% { transform: rotate(12deg); }
 }
 
-/* Responsiveness Fine-Tuning */
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET RESPONSIVENESS (MATCHING INDEX & ABOUT)
+   ========================================================= */
 @media (max-width: 991.98px) {
     .contact-hero-title { font-size: 2.2rem; }
     .form-section-title { font-size: 1.6rem; }
@@ -354,10 +367,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 @media (max-width: 575.98px) {
-    .contact-hero-title { font-size: 1.8rem; }
-    .form-section-title { font-size: 1.4rem; }
-    .whatsapp-float { width: 52px; height: 52px; font-size: 28px; }
-    .contact-info-card { padding: 30px 22px; }
+    /* 1. Hero Section Mobile Optimization */
+    .contact-hero-section { min-height: 280px !important; padding: 2.5rem 0 !important; }
+    .contact-hero-title { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; margin-bottom: 10px !important; }
+    .contact-hero-p { font-size: 0.8rem !important; line-height: 1.5 !important; padding: 0 10px; }
+
+    /* 2. Contact Info & Technician Image Mobile Optimization */
+    .contact-info-section { padding: 45px 0 35px 0 !important; }
+    .contact-info-card { padding: 26px 20px !important; min-height: auto !important; border-radius: 16px !important; }
+    .contact-card-title { font-size: 1.35rem !important; }
+    .contact-card-sub { font-size: 0.78rem !important; margin-bottom: 22px !important; }
+    .contact-detail-item { font-size: 0.78rem !important; gap: 12px !important; margin-bottom: 15px !important; }
+    .contact-img-box { min-height: 260px !important; border-radius: 16px !important; }
+
+    /* 3. Form & Map Section Mobile Optimization */
+    .contact-form-section { padding-bottom: 45px !important; }
+    .contact-map-box, .contact-map-box iframe { min-height: 300px !important; border-radius: 16px !important; }
+    .form-section-title { font-size: 1.35rem !important; margin-bottom: 18px !important; }
+    .btn-contact-submit { width: 100% !important; padding: 12px 0 !important; font-size: 0.85rem !important; }
+
+    /* 4. Floating WhatsApp Icon Mobile Safe Position */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 
@@ -429,7 +466,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Right Column: Technician Image Box -->
                 <div class="col-12 col-lg-6">
                     <div class="contact-img-box">
-                        <!-- IMAGE PLACEHOLDER: Technician Cable Testing Image -->
                         <img src="assets/images/2eaf6daacbcfeb54ef8944e2eb85c527772da507 (1).png" alt="Contact Technician Working">
                     </div>
                 </div>
@@ -444,7 +480,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Left Column: Google Map Live Embed -->
                 <div class="col-12 col-lg-6">
                     <div class="contact-map-box">
-                        <!-- Google Maps Live Embed for Rawathawatte, Moratuwa -->
                         <iframe src="https://maps.google.com/maps?q=Rawathawatte%20Junction,%20Galle%20Road,%20Moratuwa,%20Sri%20Lanka&t=&z=14&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
@@ -499,7 +534,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <textarea name="message" class="form-control-custom" placeholder="Write your message.." required></textarea>
                                     </div>
 
-                                    <!-- Submit Button (Aligned Right Under Bottom Underline) -->
+                                    <!-- Submit Button -->
                                     <div class="col-12 text-end pt-2">
                                         <button type="submit" class="btn btn-contact-submit">Submit</button>
                                     </div>
@@ -518,5 +553,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </a>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // LANDING SCROLL REVEAL OBSERVER FOR CONTACT PAGE
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const contactAnimElements = document.querySelectorAll(
+        ".contact-info-card, .contact-img-box, .contact-map-box, .contact-form-wrapper"
+    );
+
+    contactAnimElements.forEach(function(el) {
+        el.classList.add("apple-reveal");
+        revealObserver.observe(el);
+    });
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

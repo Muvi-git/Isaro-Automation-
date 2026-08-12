@@ -1,11 +1,11 @@
 RewriteEngine On
 
-# 1. POST Requests (Form Submissions) Redirect නොවී ආරක්ෂා කිරීම
+
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.php\ HTTP/
 RewriteRule ^([^\ ]+)\.php$ /Isaro-Automation/admin/$1 [R=301,L]
 
-# 2. Internal Rewrite (.php නැතිව එන URLs සදහා)
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [L]

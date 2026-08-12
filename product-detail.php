@@ -70,6 +70,20 @@ if ($product) {
     color: #333333;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* Breadcrumb Styling */
 .custom-breadcrumb {
     background-color: #f8f9fa;
@@ -371,16 +385,135 @@ if ($product) {
     color: #ffc107;
 }
 
-/* Responsive Fixes */
+/* Floating WhatsApp Icon Animation */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET RESPONSIVENESS (MATCHING ALL PAGES)
+   ========================================================= */
 @media (max-width: 991.98px) {
     .main-product-img-box { height: 320px; }
     .product-title-main { font-size: 1.6rem; }
     .price-current { font-size: 1.7rem; }
 }
+
 @media (max-width: 575.98px) {
-    .main-product-img-box { height: 260px; }
-    .thumb-img-box { width: 65px; height: 65px; }
-    .custom-nav-tabs .nav-link { padding: 10px 16px; font-size: 0.88rem; }
+    /* 1. Gallery & Breadcrumbs Mobile Tuning */
+    .custom-breadcrumb { padding: 10px 0 !important; }
+    .custom-breadcrumb a, .custom-breadcrumb .active { font-size: 0.75rem !important; }
+    .main-product-img-box { height: 250px !important; border-radius: 12px !important; padding: 12px !important; }
+    .thumb-img-box { width: 62px !important; height: 62px !important; border-radius: 8px !important; }
+    
+    /* 2. Product Info & Action Buttons Mobile Stacking */
+    .product-title-main { font-size: 1.35rem !important; line-height: 1.3 !important; }
+    .price-current { font-size: 1.5rem !important; }
+    .price-old { font-size: 1rem !important; }
+
+    /* Action Buttons Stacking for Easy Touch on Mobile */
+    .btn-inquire-now, 
+    .btn-whatsapp-inquire, 
+    .btn-add-compare-detail, 
+    .btn-download-datasheet {
+        width: 100% !important;
+        justify-content: center !important;
+        font-size: 0.82rem !important;
+        padding: 10px 16px !important;
+    }
+    
+    .qty-btn-box {
+        width: 100% !important;
+        justify-content: space-between !important;
+        margin-bottom: 6px;
+    }
+    .qty-btn { width: 33% !important; }
+    .qty-input { width: 34% !important; }
+
+    /* 3. Horizontal Touch Scrollable Tabs Bar */
+    .custom-nav-tabs {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none;
+    }
+    .custom-nav-tabs::-webkit-scrollbar { display: none; }
+    .custom-nav-tabs .nav-link {
+        padding: 10px 16px !important;
+        font-size: 0.82rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* 4. Related Products Grid Mobile View - Exactly 2 Side-by-Side Cards */
+    .py-5.bg-white .row.g-4 {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin-left: -4px !important;
+        margin-right: -4px !important;
+    }
+    .py-5.bg-white .row.g-4 > .col-12.col-sm-6.col-md-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        margin-bottom: 10px !important;
+    }
+    .product-card-box {
+        border-radius: 12px !important;
+    }
+    .product-card-box .position-relative {
+        height: 120px !important;
+        padding: 8px !important;
+    }
+    .product-card-box .p-3 {
+        padding: 10px 8px !important;
+    }
+    .product-card-box h6 {
+        font-size: 0.78rem !important;
+        height: 32px !important;
+        line-height: 1.25 !important;
+    }
+
+    /* 5. Floating WhatsApp Button Safe Mobile Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 
@@ -448,7 +581,7 @@ if ($product) {
                     <?php endif; ?>
                 </div>
 
-                <p class="text-muted fs-7 mb-4" style="line-height: 1.65; text-align: justify;">
+                <p class="text-muted fs-7 mb-4" style="line-height: 1.65; text-align: left;">
                     <?php echo htmlspecialchars($product['short_desc'] ?? ''); ?>
                 </p>
 
@@ -541,7 +674,7 @@ if ($product) {
                 <!-- TAB 1: DESCRIPTION -->
                 <div class="tab-pane fade show active" id="desc-pane" role="tabpanel" aria-labelledby="desc-tab">
                     <h5 class="fw-bold mb-3" style="color: #b03030;">Product Overview & Applications</h5>
-                    <p class="text-muted fs-7 mb-4" style="line-height: 1.7; text-align: justify;">
+                    <p class="text-muted fs-7 mb-4" style="line-height: 1.7; text-align: left;">
                         <?php echo nl2br(htmlspecialchars($product['full_desc'] ?? $product['short_desc'])); ?>
                     </p>
                 </div>
@@ -958,7 +1091,7 @@ function generateProductPDF(btnElement) {
         doc.text("100% Quality Tested & Guaranteed B2B Industrial Supply", 14, 284);
 
         doc.setFont("helvetica", "bold");
-        doc.text("Sales Helpline: +94 71 984 7787", 196, 280, { align: "right" });
+        doc.text("Sales Helpline: +94 11 421 6784", 196, 280, { align: "right" });
         doc.setFont("helvetica", "normal");
         doc.text("Official Web: www.isaroautomation.com", 196, 284, { align: "right" });
 
@@ -974,6 +1107,28 @@ function generateProductPDF(btnElement) {
         btnElement.style.pointerEvents = 'auto';
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Apple-Style Scroll Reveal Observer
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const animatableDetailElements = document.querySelectorAll(
+        ".main-product-img-box, .product-trust-card, .rating-summary-card, .single-review-card, .product-card-box"
+    );
+
+    animatableDetailElements.forEach(function(el) {
+        el.classList.add("apple-reveal");
+        revealObserver.observe(el);
+    });
+});
 </script>
 
 <?php include 'includes/footer.php'; ?>

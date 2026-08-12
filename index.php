@@ -253,25 +253,119 @@ $faceAvatars = [
     transition: transform 0.4s ease;
 }
 
-/* Mobile & Tablet Responsiveness Fine-Tuning */
+/* =========================================================
+   ULTRA-PREMIUM PROFESSIONAL MOBILE & TABLET RESPONSIVENESS
+   ========================================================= */
 @media (max-width: 991.98px) {
     .hero-title { font-size: 2.2rem !important; }
     .about-img-container { min-height: 320px !important; }
     .offer-control-prev-custom { left: 15px !important; }
     .offer-control-next-custom { right: 15px !important; }
-    .offer-banner-bg { min-height: 420px !important; }
-    .isaro-hero-section { min-height: 400px; }
+    .offer-banner-bg { min-height: 440px !important; }
+    .isaro-hero-section { min-height: 420px; }
+}
+
+@media (max-width: 767.98px) {
+    .isaro-hero-section { min-height: 390px; padding-top: 2rem !important; padding-bottom: 2rem !important; }
+    .hero-title { font-size: 1.85rem !important; line-height: 1.28 !important; }
+    
+    /* Sleek Mobile Partners Section */
+    .partner-badge { padding: 6px 12px !important; }
+    .partner-badge img { height: 22px !important; }
+
+    /* Special Offer Slider Controls Fix */
+    .offer-control-prev-custom,
+    .offer-control-next-custom {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    .offer-control-prev-custom { left: 8px !important; }
+    .offer-control-next-custom { right: 8px !important; }
 }
 
 @media (max-width: 575.98px) {
-    .hero-title { font-size: 1.65rem !important; }
-    .offer-card-box { padding: 1.5rem 1.25rem !important; }
-    .offer-card-box h3 { font-size: 1.1rem !important; }
-    .offer-card-box h2 { font-size: 1.35rem !important; }
-    .about-badge-circle { width: 55px !important; height: 55px !important; }
-    .offer-banner-bg { min-height: 380px !important; }
-    .whatsapp-float { width: 52px !important; height: 52px !important; font-size: 28px !important; }
+    /* 1. Hero Section Mobile Optimization */
     .isaro-hero-section { min-height: 360px; }
+    .hero-title { font-size: 1.55rem !important; letter-spacing: -0.2px !important; }
+    .isaro-hero-section .lead { font-size: 0.82rem !important; line-height: 1.45 !important; margin-bottom: 1.25rem !important; }
+    .isaro-hero-section .btn-lg { font-size: 0.85rem !important; padding: 8px 22px !important; margin-bottom: 2rem !important; }
+    
+    /* 2. Professional 2-Column E-Commerce Grid on Mobile */
+    .py-5 .row.g-4 > .col-12.col-sm-6.col-md-3 {
+        width: 50% !important;
+        float: left !important;
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+    }
+    
+    .product-card-box {
+        border-radius: 10px !important;
+    }
+    .product-card-box .position-relative {
+        height: 130px !important;
+        padding: 0.5rem !important;
+    }
+    .product-card-box .position-relative img {
+        max-height: 95px !important;
+    }
+    .product-card-box .p-3 {
+        padding: 0.65rem !important;
+    }
+    .product-card-box h6 {
+        font-size: 0.76rem !important;
+        height: 32px !important;
+        line-height: 1.25 !important;
+    }
+    .product-card-box .fw-bold {
+        font-size: 0.8rem !important;
+    }
+    .product-action-btn {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* 3. About Us Overlapping Images & Badges Mobile Layout */
+    .about-img-container {
+        min-height: 260px !important;
+        justify-content: center !important;
+        margin-top: 10px;
+    }
+    .about-img-container img:first-child {
+        width: 78% !important;
+        height: 250px !important;
+    }
+    .about-img-container img:last-child {
+        width: 52% !important;
+        height: 150px !important;
+        left: 5% !important;
+        bottom: 0px !important;
+    }
+    .about-badge-circle { width: 50px !important; height: 50px !important; margin-bottom: 8px !important; }
+    .about-badge-circle i { font-size: 1.2rem !important; }
+
+    /* 4. Special Offer Banner Mobile Glass Card */
+    .offer-banner-bg { min-height: 410px !important; }
+    .offer-card-box {
+        padding: 1.25rem 1rem !important;
+        border-radius: 14px !important;
+        width: 92% !important;
+    }
+    .offer-card-box h3 { font-size: 1.05rem !important; }
+    .offer-card-box h2 { font-size: 1.25rem !important; }
+    .offer-card-box p { font-size: 0.74rem !important; margin-bottom: 1rem !important; }
+    .offer-card-box .btn { font-size: 0.8rem !important; padding: 6px 18px !important; }
+
+    /* 5. Testimonials & Projects Swiper Mobile Tuning */
+    .avatar-stack-img { width: 32px !important; height: 32px !important; }
+    .testimonials-section h2 { font-size: 1.6rem !important; }
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+    }
 }
 </style>
 
@@ -300,7 +394,7 @@ $faceAvatars = [
             <div>
                 <span class="hero-partners-title">Our Partners</span>
             </div>
-            <div class="d-flex justify-content-center align-items-center gap-3 gap-md-4 flex-wrap">
+            <div class="d-flex justify-content-center align-items-center gap-2 gap-md-4 flex-wrap">
                 <span class="partner-badge" title="Partner 1">
                     <img src="assets/images/b97bd4048a2dd2dd3ee7c2ea479d2d1ff89544a0.png" alt="Partner 1">
                 </span>
@@ -341,7 +435,7 @@ $faceAvatars = [
                 <div class="row g-3 text-center" style="max-width: 470px;">
                     <div class="col-4">
                         <div class="d-flex flex-column align-items-center">
-                            <div class="rounded-circle overflow-hidden shadow-sm mb-2 d-flex align-items-center justify-content-center bg-danger" style="width: 65px; height: 65px; background-color: #b03030 !important;">
+                            <div class="rounded-circle overflow-hidden shadow-sm mb-2 d-flex align-items-center justify-content-center bg-danger about-badge-circle" style="background-color: #b03030 !important;">
                                 <img src="assets/images/badge_quality.png" alt="Guaranteed Quality" class="img-fluid w-100 h-100 object-fit-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-ribbon text-white fs-3" style="display:none;"></i>
                             </div>
@@ -350,7 +444,7 @@ $faceAvatars = [
                     </div>
                     <div class="col-4">
                         <div class="d-flex flex-column align-items-center">
-                            <div class="rounded-circle overflow-hidden shadow-sm mb-2 d-flex align-items-center justify-content-center bg-danger" style="width: 65px; height: 65px; background-color: #b03030 !important;">
+                            <div class="rounded-circle overflow-hidden shadow-sm mb-2 d-flex align-items-center justify-content-center bg-danger about-badge-circle" style="background-color: #b03030 !important;">
                                 <img src="assets/images/badge_partner.png" alt="Trusted Partner" class="img-fluid w-100 h-100 object-fit-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-thumbs-up text-white fs-3" style="display:none;"></i>
                             </div>
@@ -359,7 +453,7 @@ $faceAvatars = [
                     </div>
                     <div class="col-4">
                         <div class="d-flex flex-column align-items-center">
-                            <div class="rounded-circle overflow-hidden shadow-sm mb-2 d-flex align-items-center justify-content-center bg-danger" style="width: 65px; height: 65px; background-color: #b03030 !important;">
+                            <div class="rounded-circle overflow-hidden shadow-sm mb-2 d-flex align-items-center justify-content-center bg-danger about-badge-circle" style="background-color: #b03030 !important;">
                                 <img src="assets/images/badge_leading.png" alt="Leading Company" class="img-fluid w-100 h-100 object-fit-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-chart-line text-white fs-3" style="display:none;"></i>
                             </div>
@@ -698,7 +792,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (typeof Swiper !== 'undefined' && document.querySelector('.project-swiper')) {
         new Swiper('.project-swiper', {
             slidesPerView: 1,
-            spaceBetween: 20,
+            spaceBetween: 16,
             loop: true,
             autoplay: {
                 delay: 3500,

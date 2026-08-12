@@ -13,6 +13,20 @@
     min-height: 70vh;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* Breadcrumb */
 .custom-breadcrumb {
     background-color: #ffffff;
@@ -175,6 +189,79 @@
     color: #cccccc;
     margin-bottom: 15px;
 }
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE RESPONSIVENESS (MATCHING ALL PAGES)
+   ========================================================= */
+@media (max-width: 575.98px) {
+    /* 1. Header & Breadcrumbs Mobile Optimization */
+    .custom-breadcrumb { padding: 10px 0 !important; }
+    .custom-breadcrumb a, .custom-breadcrumb .active { font-size: 0.75rem !important; }
+    .isaro-wishlist-wrapper h2 { font-size: 1.35rem !important; }
+
+    /* 2. Wishlist Items Mobile Layout */
+    .wishlist-item-row { padding: 12px 14px !important; }
+    .wishlist-img-box { width: 65px !important; height: 65px !important; }
+    
+    /* 3. Inquiry Summary Box Mobile Optimization */
+    .inquiry-summary-box { padding: 20px 16px !important; border-radius: 14px !important; margin-top: 10px; }
+    .inquiry-summary-box h5 { font-size: 1.1rem !important; }
+
+    .btn-send-whatsapp-bulk,
+    .btn-submit-quote-bulk,
+    .btn-download-pdf-bulk {
+        font-size: 0.82rem !important;
+        padding: 10px 16px !important;
+    }
+
+    .empty-wishlist-box { padding: 40px 15px !important; }
+    .empty-wishlist-icon { font-size: 2.8rem !important; }
+
+    /* 4. Floating WhatsApp Button Mobile Safe Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
+}
 </style>
 
 <div class="isaro-wishlist-wrapper">
@@ -251,7 +338,7 @@
 
                 <div class="d-flex align-items-center gap-2 x-small text-muted">
                     <i class="fas fa-headset text-danger fs-6"></i>
-                    <span>Need technical advice? Call us at <strong>+94 71 984 7787</strong></span>
+                    <span>Need technical advice? Call us at <strong>+94 11 4216784</strong></span>
                 </div>
             </div>
         </div>
@@ -520,7 +607,7 @@ function generateBulkQuotePDF(btnElement) {
         doc.text("100% Quality Tested & Guaranteed B2B Industrial Supply", 14, 284);
 
         doc.setFont("helvetica", "bold");
-        doc.text("Sales Helpline: +94 71 984 7787", 196, 280, { align: "right" });
+        doc.text("Sales Helpline: +94 11 4216784", 196, 280, { align: "right" });
         doc.setFont("helvetica", "normal");
         doc.text("Official Web: www.isaroautomation.com", 196, 284, { align: "right" });
 
@@ -539,6 +626,26 @@ function generateBulkQuotePDF(btnElement) {
 
 document.addEventListener('DOMContentLoaded', function() {
     renderWishlist();
+
+    // Apple-Style Scroll Reveal Observer
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const wishlistElements = document.querySelectorAll(
+        "#wishlistItemsBox, .inquiry-summary-box"
+    );
+
+    wishlistElements.forEach(function(el) {
+        el.classList.add("apple-reveal");
+        revealObserver.observe(el);
+    });
 });
 </script>
 

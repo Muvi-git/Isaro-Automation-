@@ -34,6 +34,20 @@ if ($project) {
     min-height: 70vh;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* Breadcrumb Styling */
 .custom-breadcrumb {
     background-color: #ffffff;
@@ -191,13 +205,103 @@ if ($project) {
     font-weight: 300;
 }
 
-/* Responsiveness Fine-Tuning */
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET RESPONSIVENESS (MATCHING ALL PAGES)
+   ========================================================= */
 @media (max-width: 991.98px) {
     .project-main-img-box { height: 320px; }
 }
+
 @media (max-width: 575.98px) {
-    .project-main-img-box { height: 230px; }
-    .project-img-box { height: 150px; }
+    /* 1. Gallery & Breadcrumbs Mobile Tuning */
+    .custom-breadcrumb { padding: 10px 0 !important; }
+    .custom-breadcrumb a, .custom-breadcrumb .active { font-size: 0.75rem !important; }
+    .project-main-img-box { height: 230px !important; border-radius: 12px !important; }
+    .project-meta-card { padding: 18px 15px !important; border-radius: 14px !important; }
+
+    /* 2. Related Projects Mobile Grid - Exactly 2 Side-by-Side Cards */
+    .pt-5.mt-4 .row.g-4 {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin-left: -4px !important;
+        margin-right: -4px !important;
+    }
+    .pt-5.mt-4 .row.g-4 > .col-12.col-sm-6.col-lg-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .project-grid-card {
+        padding: 10px 8px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.05) !important;
+    }
+    .project-img-box {
+        height: 115px !important;
+        margin-bottom: 8px !important;
+        border-radius: 8px !important;
+    }
+    .project-grid-title {
+        font-size: 0.78rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 4px !important;
+    }
+    .project-grid-desc {
+        font-size: 0.68rem !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    /* 3. Floating WhatsApp Button Safe Mobile Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 
@@ -232,7 +336,7 @@ if ($project) {
             <!-- Title & Article Content -->
             <h2 class="fw-bold mb-3" style="color: #b03030;"><?php echo htmlspecialchars($project['title']); ?></h2>
             
-            <p class="text-muted fs-7 mb-4" style="line-height: 1.7; text-align: justify;">
+            <p class="text-muted fs-7 mb-4" style="line-height: 1.7; text-align: left;">
                 <?php echo htmlspecialchars($project['short_desc']); ?>
             </p>
 
@@ -268,7 +372,7 @@ if ($project) {
             </div>
 
             <h5 class="fw-bold text-dark mb-2">Project Results & Details</h5>
-            <p class="text-muted fs-7 mb-0" style="line-height: 1.7; text-align: justify;">
+            <p class="text-muted fs-7 mb-0" style="line-height: 1.7; text-align: left;">
                 <?php echo nl2br(htmlspecialchars($project['full_details'] ?? $project['short_desc'])); ?>
             </p>
         </div>
@@ -405,6 +509,28 @@ function handleProjectQuoteSubmit(e) {
         if (modal) modal.hide();
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Apple-Style Scroll Reveal Observer
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const animatableProjectElements = document.querySelectorAll(
+        ".project-main-img-box, .project-meta-card, .bg-white.p-4.rounded-3, .project-grid-card"
+    );
+
+    animatableProjectElements.forEach(function(el) {
+        el.classList.add("apple-reveal");
+        revealObserver.observe(el);
+    });
+});
 </script>
 
 <?php include 'includes/footer.php'; ?>

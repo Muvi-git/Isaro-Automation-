@@ -21,6 +21,20 @@ try {
     min-height: 70vh;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* Breadcrumb */
 .custom-breadcrumb {
     background-color: #ffffff;
@@ -88,6 +102,7 @@ try {
     line-height: 1.7;
     padding: 20px 22px;
     background-color: #ffffff;
+    text-align: left !important; /* Prevents awkward word gaps */
 }
 
 /* Help Sidebar */
@@ -99,6 +114,76 @@ try {
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     position: sticky;
     top: 110px;
+}
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE RESPONSIVENESS (MATCHING ALL PAGES)
+   ========================================================= */
+@media (max-width: 991.98px) {
+    .faq-hero-section { min-height: 240px; margin-bottom: 30px; }
+}
+
+@media (max-width: 575.98px) {
+    /* 1. Hero & Breadcrumbs Mobile Optimization */
+    .custom-breadcrumb { padding: 10px 0 !important; }
+    .custom-breadcrumb a, .custom-breadcrumb .active { font-size: 0.75rem !important; }
+    .faq-hero-section { min-height: 220px !important; padding: 2rem 0 !important; margin-bottom: 25px !important; }
+    .faq-hero-section h1 { font-size: clamp(1.5rem, 5.5vw, 2rem) !important; }
+    .faq-hero-section p { font-size: 0.78rem !important; line-height: 1.5 !important; padding: 0 10px; }
+
+    /* 2. Accordion Mobile Optimization */
+    .accordion-button { padding: 14px 16px !important; font-size: 0.85rem !important; line-height: 1.35 !important; }
+    .accordion-body { padding: 14px 16px !important; font-size: 0.8rem !important; line-height: 1.55 !important; }
+    
+    /* 3. Help Card Mobile Optimization */
+    .faq-help-card { padding: 20px 16px !important; border-radius: 14px !important; margin-top: 10px; }
+    .faq-help-card h5 { font-size: 1.1rem !important; }
+    .faq-help-card p { font-size: 0.78rem !important; }
+
+    /* 4. Floating WhatsApp Button Mobile Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 
@@ -174,6 +259,36 @@ try {
     </div>
 </div>
 
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/94114216784" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Apple-Style Scroll Reveal Observer
+    const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const animatableFaqElements = document.querySelectorAll(
+        ".accordion-item, .faq-help-card"
+    );
+
+    animatableFaqElements.forEach(function(el, idx) {
+        el.classList.add("apple-reveal");
+        el.style.transitionDelay = ((idx % 6) * 0.1) + 's';
+        revealObserver.observe(el);
+    });
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>

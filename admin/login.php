@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($username) && !empty($password)) {
         
-        // 1. Table එක නැත්නම් සාදා Password column එක VARCHAR(255) කිරීම
+      
         try {
             $pdo->exec("CREATE TABLE IF NOT EXISTS `admins` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,

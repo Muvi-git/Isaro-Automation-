@@ -56,6 +56,20 @@ try {
     background-color: #f4f4f4;
 }
 
+/* Apple-Style Smooth Animation Classes */
+.apple-reveal {
+    opacity: 0 !important;
+    transform: translateY(35px) scale(0.98) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+}
+
+.apple-reveal.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+}
+
 /* 1. Hero Section */
 .products-hero-section {
     position: relative;
@@ -315,6 +329,44 @@ try {
     flex: 0 0 auto;
 }
 
+/* Floating WhatsApp Button */
+.whatsapp-float {
+    position: fixed;
+    width: 58px;
+    height: 58px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFFFFF !important;
+    border-radius: 50px;
+    font-size: 32px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5) !important;
+    background-color: #20ba5a !important;
+}
+
+.whatsapp-float:hover i {
+    animation: whatsapp-shake 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes whatsapp-shake {
+    0% { transform: rotate(-12deg); }
+    100% { transform: rotate(12deg); }
+}
+
+/* =========================================================
+   APPLE-GRADE MOBILE RESPONSIVENESS (OPTIMIZED HEIGHT WITH DESCRIPTION)
+   ========================================================= */
 @media (max-width: 991.98px) {
     .products-hero-title { font-size: 2.2rem; }
     .products-main-title, .new-arrivals-title { font-size: 1.8rem; }
@@ -323,10 +375,110 @@ try {
 }
 
 @media (max-width: 575.98px) {
-    .products-hero-title { font-size: 1.8rem; }
-    .products-main-title, .new-arrivals-title { font-size: 1.5rem; }
-    .category-banner-img { height: 160px; }
-    .product-img-box { height: 150px; }
+    /* 1. Hero Section Mobile Optimization */
+    .products-hero-section { min-height: 280px !important; padding: 2.5rem 0 !important; }
+    .products-hero-title { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; margin-bottom: 10px !important; }
+    .products-hero-p { font-size: 0.8rem !important; line-height: 1.5 !important; padding: 0 10px; }
+
+    /* 2. Main Section Padding & Title */
+    .products-main-section { padding: 30px 0 !important; }
+    .products-main-title { font-size: 1.5rem !important; }
+    .category-dropdown-btn { font-size: 0.82rem !important; }
+
+    /* 3. Products Grid Mobile View - 2 Cards Side-by-Side with Height Increase & Description */
+    .products-mobile-slider {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        padding: 4px 0 !important;
+        gap: 0 !important;
+        margin-left: -4px !important;
+        margin-right: -4px !important;
+    }
+    
+    .products-mobile-slider > [class*="col-"] {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .product-card {
+        padding: 12px 10px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.05) !important;
+    }
+    
+    .product-img-box {
+        height: 125px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .product-title {
+        font-size: 0.78rem !important;
+        min-height: auto !important;
+        height: 32px !important;
+        line-height: 1.25 !important;
+        margin-bottom: 6px !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    /* Elegant Compact 2-Line Description for Mobile View */
+    .product-desc {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        font-size: 0.68rem !important;
+        margin-bottom: 12px !important;
+        line-height: 1.3 !important;
+        color: #666666 !important;
+    }
+
+    .btn-more-details {
+        padding: 6px 10px !important;
+        font-size: 0.7rem !important;
+        flex-grow: 1;
+        text-align: center;
+    }
+    
+    .btn-compare-card {
+        padding: 6px 8px !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* 4. Category Banner Section Mobile Fitting */
+    .category-banner-section { padding: 35px 0 !important; }
+    .category-banner-img { height: 165px !important; border-radius: 14px !important; }
+    .category-banner-title { font-size: 0.88rem !important; }
+
+    /* 5. New Arrivals Horizontal Scroll Polish */
+    .new-arrivals-section { padding: 35px 0 45px 0 !important; }
+    .new-arrivals-title { font-size: 1.4rem !important; margin-bottom: 16px !important; }
+    .new-arrivals-scroll {
+        gap: 8px !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    .new-arrivals-card {
+        min-width: 155px !important;
+        max-width: 165px !important;
+        scroll-snap-align: start !important;
+    }
+
+    /* 6. Floating WhatsApp Button Safe Mobile Placement */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 
@@ -365,8 +517,8 @@ try {
                 </div>
             </div>
 
-            <!-- Product Grid 1 (Strictly Dynamic Database Items) -->
-            <div class="row g-4">
+            <!-- Product Grid 1 (Dynamic DB Items with 2-Products Mobile View) -->
+            <div class="row g-4 products-mobile-slider">
                 <?php if(!empty($grid1Products)): ?>
                     <?php foreach($grid1Products as $p): ?>
                     <div class="col-12 col-sm-6 col-lg-3">
@@ -398,7 +550,7 @@ try {
         </div>
     </section>
 
-    <!-- 3. RED CATEGORY HIGHLIGHT BANNER SLIDER SECTION (STRICTLY 3 VISIBLE PER SLIDE) -->
+    <!-- 3. RED CATEGORY HIGHLIGHT BANNER SLIDER SECTION -->
     <section class="category-banner-section">
         <div class="container">
             <div class="swiper category-swiper">
@@ -460,11 +612,11 @@ try {
         </div>
     </section>
 
-    <!-- 4. SECOND PRODUCTS GRID (Strictly Dynamic Database Items) -->
+    <!-- 4. SECOND PRODUCTS GRID -->
     <?php if(!empty($grid2Products)): ?>
     <section class="products-main-section">
         <div class="container">
-            <div class="row g-4">
+            <div class="row g-4 products-mobile-slider">
                 <?php foreach($grid2Products as $p): ?>
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $p['id']; ?>')">
@@ -491,7 +643,7 @@ try {
     </section>
     <?php endif; ?>
 
-    <!-- 5. NEW ARRIVALS HORIZONTAL SCROLL SECTION (Strictly Dynamic Database Items) -->
+    <!-- 5. NEW ARRIVALS HORIZONTAL SCROLL SECTION -->
     <section class="new-arrivals-section">
         <div class="container">
             <h3 class="new-arrivals-title">New Arrivals</h3>
@@ -581,8 +733,8 @@ function addToCompare(event, title, code, price, img) {
 document.addEventListener("DOMContentLoaded", function() {
     // 1. Initialize Swiper Slider for Category Banner Section
     const categorySwiper = new Swiper('.category-swiper', {
-        slidesPerView: 1,
-        spaceBetween: 20,
+        slidesPerView: 1.18,
+        spaceBetween: 14,
         autoplay: {
             delay: 3500,
             disableOnInteraction: false,

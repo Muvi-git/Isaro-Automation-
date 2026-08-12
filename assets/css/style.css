@@ -21,7 +21,7 @@ html, body {
 }
 
 body {
-    /* Fixed Header එක නිසා Content එක යටට යෑම වැළැක්වීමට */
+
     padding-top: 95px !important; 
 }
 

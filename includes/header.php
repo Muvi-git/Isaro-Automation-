@@ -71,6 +71,12 @@ header.isaro-navbar {
     transform: translateZ(0); /* Hardware lock to prevent jitter */
 }
 
+.navbar-brand img {
+    max-height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
 .isaro-header-actions {
     display: flex;
     align-items: center;
@@ -288,8 +294,7 @@ header.isaro-navbar {
     font-size: 0.83rem;
     line-height: 1.65;
     color: #333333;
-    text-align: justify;
-    text-justify: inter-word;
+    text-align: left !important; /* Fixed text spacing gaps */
     margin-bottom: 18px;
 }
 
@@ -712,10 +717,11 @@ header.isaro-navbar {
 }
 
 @media (max-width: 575.98px) {
+    .navbar-brand img { max-height: 38px !important; }
     .about-hero-title, .contact-hero-title { font-size: 1.8rem; }
     .who-title, .team-section-title, .form-section-title { font-size: 1.5rem; }
     .pill-image-wrapper { height: 230px; border-radius: 30px; }
-    .whatsapp-float { width: 52px; height: 52px; font-size: 28px; }
+    .whatsapp-float { width: 48px !important; height: 48px !important; font-size: 26px !important; bottom: 18px !important; right: 18px !important; }
     .vm-card { padding: 20px 15px; min-height: auto; }
     .contact-info-card { padding: 30px 22px; }
 }
@@ -782,6 +788,11 @@ header.isaro-navbar {
         </div>
     </div>
 </header>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/94114216784" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
 <!-- 100% UNIVERSAL SCROLL REVEAL (FOR EVERY SINGLE PAGE & GRID) -->
 <script>

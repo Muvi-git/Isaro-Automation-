@@ -299,7 +299,9 @@ try {
     100% { transform: rotate(12deg); }
 }
 
-/* Responsiveness Fine-Tuning */
+/* =========================================================
+   APPLE-GRADE MOBILE & TABLET RESPONSIVENESS (MATCHING INDEX)
+   ========================================================= */
 @media (max-width: 991.98px) {
     .about-hero-title { font-size: 2.2rem; }
     .who-title, .team-section-title { font-size: 1.8rem; }
@@ -309,17 +311,45 @@ try {
 }
 
 @media (max-width: 575.98px) {
-    .about-hero-title { font-size: 1.8rem; }
-    .who-title, .team-section-title { font-size: 1.5rem; }
-    .pill-image-wrapper { height: 230px; border-radius: 30px; }
-    .whatsapp-float { width: 52px; height: 52px; font-size: 28px; }
-    .vm-card { padding: 20px 15px; min-height: auto; }
+    /* 1. Hero Section Mobile Optimization */
+    .about-hero-section { min-height: 280px !important; padding: 2.5rem 0 !important; }
+    .about-hero-title { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; margin-bottom: 10px !important; }
+    .about-hero-p { font-size: 0.8rem !important; line-height: 1.5 !important; padding: 0 10px; }
+
+    /* 2. Who Are We Section Mobile Layout */
+    .who-we-are-section { padding: 45px 0 35px 0 !important; }
+    .who-title { font-size: 1.5rem !important; margin-bottom: 14px !important; }
+    .who-p { font-size: 0.8rem !important; line-height: 1.55 !important; margin-bottom: 14px !important; }
+    .pill-image-wrapper { height: 210px !important; border-radius: 28px !important; }
+
+    /* 3. Vision & Mission Cards Mobile Optimization */
+    .vm-section { padding-bottom: 45px !important; }
+    .vm-card { padding: 20px 16px !important; min-height: auto !important; border-radius: 18px !important; }
+    .vm-title { font-size: 1.3rem !important; margin-bottom: 4px !important; }
+    .vm-p { font-size: 0.75rem !important; line-height: 1.4 !important; }
+
+    /* 4. Meet Our Team Section Mobile Slider */
+    .team-section { padding: 50px 0 60px 0 !important; }
+    .team-section-title { font-size: 1.6rem !important; margin-bottom: 25px !important; }
+    .team-member-img-box { border-radius: 16px !important; }
+    .team-member-name { font-size: 0.95rem !important; margin-top: 10px !important; }
+    .team-member-desc { font-size: 0.72rem !important; }
+
+    /* 5. Floating WhatsApp Icon Mobile Safe Position */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 26px !important;
+        bottom: 18px !important;
+        right: 18px !important;
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    }
 }
 </style>
 
 <div class="isaro-main-wrapper isaro-about-page">
 
-   <!-- 1. HERO SECTION -->
+    <!-- 1. HERO SECTION -->
     <section class="about-hero-section py-5">
         <div class="container py-4">
             <h1 class="about-hero-title">About Us</h1>
@@ -402,7 +432,7 @@ try {
         </div>
     </section>
 
-    <!-- 4. MEET OUR TEAM SECTION (AUTO SLIDING BACKGROUND & STRICTLY 4 VISIBLE MEMBER CARDS) -->
+    <!-- 4. MEET OUR TEAM SECTION (AUTO SLIDING BACKGROUND & SWIPER SLIDER WITH APPLE MOBILE PEEK EFFECT) -->
     <section class="team-section">
         <!-- 3 Layered Background Images for Automatic Crossfade -->
         <div class="team-bg-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('assets/images/67d12759ce882ac6dba72d274c24e0c3e3f0bc10.png');"></div>
@@ -459,11 +489,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 4000);
     }
 
-    // 2. Meet Our Team Cards Swiper
+    // 2. Meet Our Team Cards Swiper with Apple Mobile Touch Peek Effect
     if (typeof Swiper !== 'undefined' && document.querySelector('.team-swiper')) {
         new Swiper('.team-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
+            slidesPerView: 1.18,
+            spaceBetween: 14,
             loop: true,
             autoplay: {
                 delay: 3500,
@@ -518,4 +548,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php include 'includes/footer.php'; ?> 
+<?php include 'includes/footer.php'; ?>
