@@ -279,6 +279,28 @@ if ($product) {
     box-shadow: 0 4px 14px rgba(30, 33, 37, 0.25);
 }
 
+/* Product Detail Wishlist Button */
+.btn-add-wishlist-detail {
+    border: 1px solid #b03030;
+    color: #b03030;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 8px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-add-wishlist-detail:hover,
+.btn-add-wishlist-detail.active {
+    background-color: #b03030;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(176, 48, 48, 0.25);
+}
+
 /* Feature Perks */
 .product-trust-card {
     background: #f8f9fa;
@@ -444,7 +466,8 @@ if ($product) {
     /* Action Buttons Stacking for Easy Touch on Mobile */
     .btn-inquire-now, 
     .btn-whatsapp-inquire, 
-    .btn-add-compare-detail, 
+    .btn-add-compare-detail,
+    .btn-add-wishlist-detail, 
     .btn-download-datasheet {
         width: 100% !important;
         justify-content: center !important;
@@ -601,6 +624,10 @@ if ($product) {
                     <a href="https://wa.me/94114216784?text=Hi%20Isaro%20Automation,%20I%20am%20interested%20in%20<?php echo urlencode($product['title']); ?>" target="_blank" class="btn btn-whatsapp-inquire d-flex align-items-center gap-2">
                         <i class="fab fa-whatsapp fs-5"></i> Chat on WhatsApp
                     </a>
+
+                    <button type="button" id="detailWishlistBtn" onclick="toggleWishlistDetail('<?php echo htmlspecialchars($product['title']); ?>', '<?php echo htmlspecialchars($product['sku']); ?>', 'Rs <?php echo number_format($product['price'],0); ?>', '<?php echo htmlspecialchars($product['main_img']); ?>', this)" class="btn btn-add-wishlist-detail">
+                        <i class="far fa-heart fs-5"></i> Add to Wishlist
+                    </button>
 
                     <button type="button" onclick="addToCompare('<?php echo htmlspecialchars($product['title']); ?>', '<?php echo htmlspecialchars($product['sku']); ?>', 'Rs <?php echo number_format($product['price'],0); ?>', '<?php echo htmlspecialchars($product['main_img']); ?>')" class="btn btn-add-compare-detail d-flex align-items-center gap-2">
                         <i class="fas fa-balance-scale fs-5"></i> Add to Compare
@@ -943,6 +970,53 @@ function handleInquirySubmit(e) {
     }
 }
 
+function toggleWishlistDetail(title, code, price, img, btn) {
+    var stored = localStorage.getItem('isaro_wishlist');
+    var list = stored ? JSON.parse(stored) : [];
+    var index = list.findIndex(function(item) { return item.sku === code || item.title === title; });
+
+    if (index > -1) {
+        list.splice(index, 1);
+        if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '<i class="far fa-heart fs-5"></i> Add to Wishlist';
+        }
+    } else {
+        list.push({
+            id: Date.now().toString(),
+            title: title,
+            sku: code,
+            price: price,
+            img: img
+        });
+        if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '<i class="fas fa-heart fs-5 text-white"></i> Saved to Wishlist';
+        }
+    }
+    localStorage.setItem('isaro_wishlist', JSON.stringify(list));
+    
+    var badge = document.getElementById('headerWishlistCount');
+    if (badge) {
+        badge.innerText = list.length;
+    }
+}
+
+function syncDetailWishlistState(title, code) {
+    var stored = localStorage.getItem('isaro_wishlist');
+    var list = stored ? JSON.parse(stored) : [];
+    var btn = document.getElementById('detailWishlistBtn');
+    if (!btn) return;
+    var exists = list.some(function(item) { return item.sku === code || item.title === title; });
+    if (exists) {
+        btn.classList.add('active');
+        btn.innerHTML = '<i class="fas fa-heart fs-5 text-white"></i> Saved to Wishlist';
+    } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<i class="far fa-heart fs-5"></i> Add to Wishlist';
+    }
+}
+
 function addToCompare(title, code, price, img) {
     var stored = localStorage.getItem('isaro_compare');
     var list = stored ? JSON.parse(stored) : [];
@@ -1109,6 +1183,9 @@ function generateProductPDF(btnElement) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Wishlist Sync for Detail Page
+    syncDetailWishlistState('<?php echo htmlspecialchars($product['title'] ?? ''); ?>', '<?php echo htmlspecialchars($product['sku'] ?? ''); ?>');
+
     // Apple-Style Scroll Reveal Observer
     const observerOptions = { root: null, rootMargin: "0px 0px -30px 0px", threshold: 0.05 };
     const revealObserver = new IntersectionObserver(function(entries, observer) {

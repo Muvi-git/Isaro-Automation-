@@ -155,21 +155,71 @@ try {
 }
 
 .product-img-box {
+    position: relative;
     width: 100%;
     height: 180px;
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 15px;
     background-color: #ffffff;
-    padding: 0;
+    padding: 6px; /* Inner spacing ensures products don't clash with icons */
 }
 
 .product-img-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* Crisp professional display without top-edge collision */
     object-position: center;
     display: block;
+    transition: transform 0.35s ease;
+}
+
+.product-card:hover .product-img-box img {
+    transform: scale(1.05);
+}
+
+/* Ultra-Sleek Glassmorphism Action Overlay */
+.card-action-overlay {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 10;
+}
+
+.btn-card-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(230, 230, 230, 0.8);
+    color: #444444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+}
+
+.btn-card-action:hover {
+    background: #b03030;
+    color: #ffffff !important;
+    border-color: #b03030;
+    transform: scale(1.12);
+    box-shadow: 0 6px 14px rgba(176, 48, 48, 0.3);
+}
+
+.btn-card-action.active {
+    background: #ffffff;
+    color: #b03030;
+    border-color: #b03030;
 }
 
 .product-content-box {
@@ -365,7 +415,7 @@ try {
 }
 
 /* =========================================================
-   APPLE-GRADE MOBILE RESPONSIVENESS (OPTIMIZED HEIGHT WITH DESCRIPTION)
+   APPLE-GRADE MOBILE RESPONSIVENESS
    ========================================================= */
 @media (max-width: 991.98px) {
     .products-hero-title { font-size: 2.2rem; }
@@ -385,7 +435,7 @@ try {
     .products-main-title { font-size: 1.5rem !important; }
     .category-dropdown-btn { font-size: 0.82rem !important; }
 
-    /* 3. Products Grid Mobile View - 2 Cards Side-by-Side with Height Increase & Description */
+    /* 3. Products Grid Mobile View - 2 Cards Side-by-Side */
     .products-mobile-slider {
         display: flex !important;
         flex-wrap: wrap !important;
@@ -413,6 +463,19 @@ try {
     .product-img-box {
         height: 125px !important;
         margin-bottom: 10px !important;
+        padding: 4px !important;
+    }
+
+    .btn-card-action {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.68rem !important;
+    }
+
+    .card-action-overlay {
+        top: 4px !important;
+        right: 4px !important;
+        gap: 4px !important;
     }
     
     .product-title {
@@ -524,6 +587,14 @@ try {
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $p['id']; ?>')">
                             <div class="product-img-box">
+                                <div class="card-action-overlay">
+                                    <button type="button" class="btn-card-action btn-wishlist-card" data-title="<?php echo htmlspecialchars($p['title']); ?>" data-sku="<?php echo htmlspecialchars($p['sku']); ?>" onclick="addToWishlist(event, '<?php echo htmlspecialchars($p['title']); ?>', '<?php echo htmlspecialchars($p['sku']); ?>', 'Rs <?php echo number_format($p['price'], 0); ?>', '<?php echo htmlspecialchars($p['main_img']); ?>', this)" title="Add to Wishlist">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <a href="product-detail.php?id=<?php echo $p['id']; ?>" class="btn-card-action" onclick="event.stopPropagation()" title="View Details">
+                                        <i class="far fa-eye"></i>
+                                    </a>
+                                </div>
                                 <img src="<?php echo htmlspecialchars($p['main_img']); ?>" alt="<?php echo htmlspecialchars($p['title']); ?>">
                             </div>
                             <div class="product-content-box">
@@ -621,6 +692,14 @@ try {
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $p['id']; ?>')">
                         <div class="product-img-box">
+                            <div class="card-action-overlay">
+                                <button type="button" class="btn-card-action btn-wishlist-card" data-title="<?php echo htmlspecialchars($p['title']); ?>" data-sku="<?php echo htmlspecialchars($p['sku']); ?>" onclick="addToWishlist(event, '<?php echo htmlspecialchars($p['title']); ?>', '<?php echo htmlspecialchars($p['sku']); ?>', 'Rs <?php echo number_format($p['price'], 0); ?>', '<?php echo htmlspecialchars($p['main_img']); ?>', this)" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <a href="product-detail.php?id=<?php echo $p['id']; ?>" class="btn-card-action" onclick="event.stopPropagation()" title="View Details">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                            </div>
                             <img src="<?php echo htmlspecialchars($p['main_img']); ?>" alt="<?php echo htmlspecialchars($p['title']); ?>">
                         </div>
                         <div class="product-content-box">
@@ -654,6 +733,14 @@ try {
                     <div class="new-arrivals-card">
                         <div class="product-card" onclick="navigateToDetail(event, 'product-detail.php?id=<?php echo $np['id']; ?>')">
                             <div class="product-img-box" style="height: 120px;">
+                                <div class="card-action-overlay">
+                                    <button type="button" class="btn-card-action btn-wishlist-card" data-title="<?php echo htmlspecialchars($np['title']); ?>" data-sku="<?php echo htmlspecialchars($np['sku']); ?>" onclick="addToWishlist(event, '<?php echo htmlspecialchars($np['title']); ?>', '<?php echo htmlspecialchars($np['sku']); ?>', 'Rs <?php echo number_format($np['price'], 0); ?>', '<?php echo htmlspecialchars($np['main_img']); ?>', this)" title="Add to Wishlist">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <a href="product-detail.php?id=<?php echo $np['id']; ?>" class="btn-card-action" onclick="event.stopPropagation()" title="View Details">
+                                        <i class="far fa-eye"></i>
+                                    </a>
+                                </div>
                                 <img src="<?php echo htmlspecialchars($np['main_img']); ?>" alt="<?php echo htmlspecialchars($np['title']); ?>">
                             </div>
                             <div class="product-content-box">
@@ -688,7 +775,7 @@ try {
 <!-- Swiper Slider JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-<!-- Navigation, Compare, Slider & Scroll Reveal Script -->
+<!-- Navigation, Compare, Wishlist, Slider & Scroll Reveal Script -->
 <script>
 function navigateToDetail(event, url) {
     if (event.target.closest('button') || event.target.closest('a')) {
@@ -730,8 +817,61 @@ function addToCompare(event, title, code, price, img) {
     }
 }
 
+function addToWishlist(event, title, code, price, img, btn) {
+    event.stopPropagation();
+    var stored = localStorage.getItem('isaro_wishlist');
+    var list = stored ? JSON.parse(stored) : [];
+    var index = list.findIndex(function(item) { return item.sku === code || item.title === title; });
+
+    if (index > -1) {
+        list.splice(index, 1);
+        if (btn) {
+            btn.classList.remove('active');
+            btn.querySelector('i').className = 'far fa-heart';
+        }
+    } else {
+        list.push({
+            id: Date.now().toString(),
+            title: title,
+            sku: code,
+            price: price,
+            img: img
+        });
+        if (btn) {
+            btn.classList.add('active');
+            btn.querySelector('i').className = 'fas fa-heart text-danger';
+        }
+    }
+    localStorage.setItem('isaro_wishlist', JSON.stringify(list));
+    
+    var badge = document.getElementById('headerWishlistCount');
+    if (badge) {
+        badge.innerText = list.length;
+    }
+}
+
+function syncWishlistState() {
+    var stored = localStorage.getItem('isaro_wishlist');
+    var list = stored ? JSON.parse(stored) : [];
+    document.querySelectorAll('.btn-wishlist-card').forEach(function(btn) {
+        var code = btn.getAttribute('data-sku');
+        var title = btn.getAttribute('data-title');
+        var exists = list.some(function(item) { return item.sku === code || item.title === title; });
+        if (exists) {
+            btn.classList.add('active');
+            btn.querySelector('i').className = 'fas fa-heart text-danger';
+        } else {
+            btn.classList.remove('active');
+            btn.querySelector('i').className = 'far fa-heart';
+        }
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. Initialize Swiper Slider for Category Banner Section
+    // 1. Sync Wishlist States on Load
+    syncWishlistState();
+
+    // 2. Initialize Swiper Slider for Category Banner Section
     const categorySwiper = new Swiper('.category-swiper', {
         slidesPerView: 1.18,
         spaceBetween: 14,
@@ -755,7 +895,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 2. Sequential Scroll Reveal for Products Page
+    // 3. Sequential Scroll Reveal for Products Page
     const observerOptions = { root: null, rootMargin: "0px 0px -40px 0px", threshold: 0.05 };
     const revealObserver = new IntersectionObserver(function(entries, observer) {
         entries.forEach(function(entry) {
