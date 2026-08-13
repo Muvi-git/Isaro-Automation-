@@ -11,7 +11,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Ultra-HD Crisp Vector Circular Favicon (Lossless Upscaled SVG) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='isaroGlow' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23900c3f'/%3E%3Cstop offset='50%25' stop-color='%23c71585'/%3E%3Cstop offset='100%25' stop-color='%23e65c9c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23isaroGlow)' stroke='%23ffffff' stroke-width='2'/%3E%3Ccircle cx='50' cy='22' r='7' fill='%23ffd700' stroke='%23333333' stroke-width='0.8'/%3E%3Ccircle cx='50' cy='22' r='3.2' fill='%23000000'/%3E%3Cpolyline points='12,47 40,47 50,28 62,75 72,54 88,47' fill='none' stroke='%23ffd700' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpolyline points='12,54 38,54 50,35 62,82 72,61 88,54' fill='none' stroke='%23ffd700' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-    <!-- Google Fonts Preconnect (Speed & Font Flicker Fix) -->
+    <!-- Google Fonts Preconnect (Speed, Font Flicker & Swap Fix) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,7 +25,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <!-- APPLE-STYLE ZERO-SHIFT PREMIUM ANIMATION ENGINE -->
     <style>
-/* 1. ROCK-SOLID GLOBAL STABILITY (NO GAPS, NO TRANSFORMS ON BODY) */
+/* 1. ROCK-SOLID GLOBAL STABILITY & SCROLLBAR GUTTER (PREVENTS HORIZONTAL SHIFT ACROSS PAGES) */
+html {
+    scrollbar-gutter: stable;
+    overflow-y: scroll !important;
+}
+
 html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -35,7 +40,6 @@ html, body {
     -moz-osx-font-smoothing: grayscale;
     background-color: #ffffff;
     scroll-behavior: smooth;
-    /* Prevent sticky breakdown: */
     overflow-x: clip !important; 
 }
 
@@ -58,7 +62,7 @@ html, body {
     opacity: 1;
 }
 
-/* 3. 100% STABLE STICKY HEADER (NO ANIMATIONS HERE) */
+/* 3. 100% STABLE STICKY HEADER (FULL ORIGINAL HEIGHT & ZERO SHIFT) */
 header.isaro-navbar {
     position: sticky !important;
     top: 0 !important;
@@ -68,13 +72,19 @@ header.isaro-navbar {
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
     margin-top: 0 !important;
+    padding: 16px 0 !important; /* Original spacious padding restored */
+    min-height: 85px !important; /* Restored full height without shrinking */
+    display: flex;
+    align-items: center;
     transform: translateZ(0); /* Hardware lock to prevent jitter */
 }
 
 .navbar-brand img {
-    max-height: 48px;
-    width: auto;
+    height: 52px !important; /* Restored full original logo dimensions */
+    width: auto !important;
+    max-height: 52px !important;
     object-fit: contain;
+    display: block;
 }
 
 .isaro-header-actions {
@@ -717,7 +727,8 @@ header.isaro-navbar {
 }
 
 @media (max-width: 575.98px) {
-    .navbar-brand img { max-height: 38px !important; }
+    header.isaro-navbar { min-height: 70px !important; padding: 10px 0 !important; }
+    .navbar-brand img { max-height: 42px !important; height: 42px !important; }
     .about-hero-title, .contact-hero-title { font-size: 1.8rem; }
     .who-title, .team-section-title, .form-section-title { font-size: 1.5rem; }
     .pill-image-wrapper { height: 230px; border-radius: 30px; }
