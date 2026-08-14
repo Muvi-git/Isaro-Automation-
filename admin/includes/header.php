@@ -27,6 +27,12 @@ $admin_page = basename($_SERVER['PHP_SELF']);
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* 1. SCROLLBAR LOCK (PREVENTS 100% OF HORIZONTAL SHIFTING/JITTER ACROSS PAGES) */
+        html {
+            scrollbar-gutter: stable;
+            overflow-y: scroll !important;
+        }
+
         html, body {
             height: 100%;
             margin: 0;

@@ -62,7 +62,7 @@ html, body {
     opacity: 1;
 }
 
-/* 3. 100% STABLE STICKY HEADER (FULL ORIGINAL HEIGHT & ZERO SHIFT) */
+/* 3. 100% STABLE STICKY HEADER (PERFECT PROPORTION & ZERO SHIFT) */
 header.isaro-navbar {
     position: sticky !important;
     top: 0 !important;
@@ -72,17 +72,17 @@ header.isaro-navbar {
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
     margin-top: 0 !important;
-    padding: 16px 0 !important; /* Original spacious padding restored */
-    min-height: 85px !important; /* Restored full height without shrinking */
+    padding: 15px 0 !important; /* Elegant balanced padding */
+    min-height: 88px !important; /* Ideal balanced height */
     display: flex;
     align-items: center;
-    transform: translateZ(0); /* Hardware lock to prevent jitter */
+    transform: translateZ(0);
 }
 
 .navbar-brand img {
-    height: 52px !important; /* Restored full original logo dimensions */
+    height: 54px !important; /* Perfectly sized logo */
     width: auto !important;
-    max-height: 52px !important;
+    max-height: 54px !important;
     object-fit: contain;
     display: block;
 }
@@ -90,63 +90,13 @@ header.isaro-navbar {
 .isaro-header-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
-}
-
-.isaro-wishlist-nav-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background-color: #ffffff;
-    color: #333333;
-    text-decoration: none;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    flex-shrink: 0;
-}
-
-.isaro-wishlist-nav-btn:hover,
-.isaro-wishlist-nav-btn.active {
-    background-color: #b03030;
-    color: #ffffff !important;
-    border-color: #b03030;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(176, 48, 48, 0.28);
-}
-
-.isaro-wishlist-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background-color: #b03030;
-    color: #ffffff;
-    font-size: 0.68rem;
-    font-weight: 700;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #ffffff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: all 0.25s ease;
-}
-
-.isaro-wishlist-nav-btn:hover .isaro-wishlist-badge,
-.isaro-wishlist-nav-btn.active .isaro-wishlist-badge {
-    background-color: #1e2125;
-    color: #ffffff;
+    justify-content: flex-end;
 }
 
 /* 4. LIVE SEARCH DROPDOWN */
 .isaro-search-box {
     position: relative;
+    min-width: 250px;
 }
 
 #liveSearchResults {
@@ -178,7 +128,7 @@ header.isaro-navbar {
     background-color: #f8f9fa;
 }
 
-/* 5. APPLE-STYLE CINEMATIC SCROLL REVEAL (NO BLUR, PERFECT SLIDE) */
+/* 5. APPLE-STYLE CINEMATIC SCROLL REVEAL */
 .apple-reveal {
     opacity: 0;
     transform: translateY(45px) scale(0.98);
@@ -192,7 +142,7 @@ header.isaro-navbar {
     transform: translateY(0) scale(1) !important;
 }
 
-/* 6. APPLE-STYLE CINEMATIC HERO ENTRANCE (TEXT ONLY, BACKGROUND STAYS STABLE) */
+/* 6. APPLE-STYLE CINEMATIC HERO ENTRANCE */
 .hero-title, .about-hero-title, .contact-hero-title, .page-hero-title {
     opacity: 0;
     animation: appleHeroText 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
@@ -304,7 +254,7 @@ header.isaro-navbar {
     font-size: 0.83rem;
     line-height: 1.65;
     color: #333333;
-    text-align: left !important; /* Fixed text spacing gaps */
+    text-align: left !important;
     margin-bottom: 18px;
 }
 
@@ -727,7 +677,7 @@ header.isaro-navbar {
 }
 
 @media (max-width: 575.98px) {
-    header.isaro-navbar { min-height: 70px !important; padding: 10px 0 !important; }
+    header.isaro-navbar { min-height: 72px !important; padding: 10px 0 !important; }
     .navbar-brand img { max-height: 42px !important; height: 42px !important; }
     .about-hero-title, .contact-hero-title { font-size: 1.8rem; }
     .who-title, .team-section-title, .form-section-title { font-size: 1.5rem; }
@@ -735,6 +685,7 @@ header.isaro-navbar {
     .whatsapp-float { width: 48px !important; height: 48px !important; font-size: 26px !important; bottom: 18px !important; right: 18px !important; }
     .vm-card { padding: 20px 15px; min-height: auto; }
     .contact-info-card { padding: 30px 22px; }
+    .isaro-search-box { min-width: 100% !important; }
 }
     </style>
 </head>
@@ -775,11 +726,10 @@ header.isaro-navbar {
                 </li>
             </ul>
 
-            <!-- Header Right Actions: Search Box & Wishlist Icon -->
+            <!-- Header Right Actions: Clean Aligned Search Box -->
             <div class="isaro-header-actions mt-2 mt-lg-0">
-                <!-- Live Search Form Box -->
                 <form class="d-flex isaro-search-box position-relative" action="products.php" method="GET" autocomplete="off">
-                    <input class="form-control isaro-search-input w-100" type="search" id="headerSearchInput" name="query" placeholder="Search..." aria-label="Search" onkeyup="handleHeaderLiveSearch(this.value)" required>
+                    <input class="form-control isaro-search-input w-100" type="search" id="headerSearchInput" name="query" placeholder="Search products..." aria-label="Search" onkeyup="handleHeaderLiveSearch(this.value)" required>
                     <button class="isaro-search-btn" type="submit" title="Search">
                         <i class="fas fa-search"></i>
                     </button>
@@ -789,12 +739,6 @@ header.isaro-navbar {
                         <!-- Dynamic items rendered here -->
                     </div>
                 </form>
-
-                <!-- Wishlist / Saved Inquiry List Header Link -->
-                <a href="wishlist.php" class="isaro-wishlist-nav-btn <?php echo ($current_page == 'wishlist.php') ? 'active' : ''; ?>" title="My Saved Inquiry List">
-                    <i class="far fa-heart fs-6"></i>
-                    <span class="isaro-wishlist-badge" id="headerWishlistCount">0</span>
-                </a>
             </div>
         </div>
     </div>
@@ -805,7 +749,7 @@ header.isaro-navbar {
     <i class="fab fa-whatsapp"></i>
 </a>
 
-<!-- 100% UNIVERSAL SCROLL REVEAL (FOR EVERY SINGLE PAGE & GRID) -->
+<!-- 100% UNIVERSAL SCROLL REVEAL -->
 <script>
 // Global Industrial Product Database for Header Live Search
 window.isaroGlobalSearchDB = [
@@ -900,19 +844,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 3. Live Header Wishlist Counter Badge Sync
-    function updateHeaderWishlistBadge() {
-        try {
-            var stored = localStorage.getItem('isaro_wishlist');
-            var count = stored ? JSON.parse(stored).length : 0;
-            var badge = document.getElementById('headerWishlistCount');
-            if (badge) {
-                badge.innerText = count;
-            }
-        } catch(e) {}
-    }
-    updateHeaderWishlistBadge();
-
    // UNIVERSAL & PRECISE SCROLL REVEAL OBSERVER
     const observerOptions = {
         root: null,
@@ -929,7 +860,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }, observerOptions);
 
-    // Universal target for ALL pages including Footer and Grid elements
     const animatableElements = document.querySelectorAll(
         ".row > [class*='col-'] > div, .card, .contact-info-card, .contact-map-box, .contact-form-wrapper, .testimonials-section .p-4, .who-text-col, .pill-image-wrapper, .isaro-footer .col-12"
     );
